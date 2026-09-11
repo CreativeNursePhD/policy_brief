@@ -1,0 +1,1169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="description" content="An interactive practice activity for nursing students learning to build a policy brief.">
+  <title>Building a Policy Brief</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230033a0'/%3E%3Cpath d='M18 14h22l8 8v28H18z' fill='white'/%3E%3Cpath d='M40 14v10h10M25 32h16M25 39h16M25 46h11' fill='none' stroke='%23d64309' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --blue: #0033a0;
+      --blue-deep: #071d49;
+      --blue-soft: #eaf0ff;
+      --orange: #d64309;
+      --orange-soft: #fff1ea;
+      --ink: #172033;
+      --muted: #566178;
+      --line: #d8deea;
+      --paper: #ffffff;
+      --canvas: #f4f7fb;
+      --success: #19724b;
+      --success-soft: #e8f6ef;
+      --warning: #8a4b08;
+      --shadow: 0 14px 40px rgba(7, 29, 73, .10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    button, textarea, input, select { font: inherit; }
+    button, label, select { touch-action: manipulation; }
+    a { color: var(--blue); font-weight: 700; text-underline-offset: 3px; }
+    a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
+      outline: 3px solid rgba(214, 67, 9, .35);
+      outline-offset: 3px;
+    }
+
+    .site-header {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      color: white;
+      background: var(--blue-deep);
+      box-shadow: 0 4px 18px rgba(7, 29, 73, .22);
+    }
+    .header-inner {
+      width: min(1180px, calc(100% - 32px));
+      min-height: 66px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--orange);
+      font-family: Georgia, serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+    .brand-title { overflow: hidden; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .header-actions { display: flex; align-items: center; justify-content: flex-end; gap: 14px; }
+    .save-status { color: #d9e3ff; font-size: .875rem; text-align: right; }
+    .restart-button { min-height: 36px; padding: 6px 11px; border: 1px solid #ffb08f; border-radius: 8px; color: white; background: var(--orange); box-shadow: 0 2px 8px rgba(108, 32, 4, .28); cursor: pointer; font-weight: 800; white-space: nowrap; }
+    .restart-button:hover { background: #b93605; }
+    .restart-button:focus-visible { outline: 3px solid #ffd6c5; outline-offset: 2px; }
+
+    .progress-shell { background: #0c2966; }
+    .progress-track {
+      width: min(1180px, calc(100% - 32px));
+      height: 5px;
+      margin: 0 auto;
+      overflow: hidden;
+      background: rgba(255,255,255,.18);
+    }
+    .progress-fill { height: 100%; width: 0; background: var(--orange); transition: width .28s ease; }
+
+    main { width: min(1180px, calc(100% - 32px)); margin: 30px auto 56px; }
+    .screen { animation: enter .25s ease both; }
+    @keyframes enter { from { opacity: 0; transform: translateY(7px); } }
+
+    .page-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    .page-banner {
+      position: relative;
+      padding: 34px clamp(24px, 5vw, 58px);
+      color: white;
+      background: linear-gradient(128deg, var(--blue-deep), var(--blue) 72%);
+    }
+    .page-banner::after {
+      position: absolute;
+      inset: auto 0 0;
+      height: 5px;
+      background: var(--orange);
+      content: "";
+    }
+    .eyebrow {
+      margin: 0 0 8px;
+      color: #ffd4c3;
+      font-size: .82rem;
+      font-weight: 850;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { line-height: 1.2; }
+    h1, h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; }
+    h1 { max-width: 850px; font-size: clamp(2rem, 5vw, 3.7rem); }
+    h2 { font-size: clamp(1.75rem, 3.3vw, 2.65rem); }
+    h3 { margin: 0 0 12px; font-size: 1.23rem; }
+    .lede { max-width: 820px; margin: 14px 0 0; color: #e9efff; font-size: 1.08rem; }
+
+    .opening-body { padding: clamp(26px, 5vw, 58px); }
+    .at-glance {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin: 0 0 28px;
+    }
+    .glance-item { padding: 17px; border: 1px solid var(--line); border-radius: 14px; background: #fbfcff; }
+    .glance-item strong { display: block; margin-bottom: 4px; color: var(--blue-deep); }
+    .notice {
+      margin: 22px 0;
+      padding: 20px 22px;
+      border-left: 5px solid var(--orange);
+      border-radius: 12px;
+      background: var(--orange-soft);
+    }
+    .notice h3 { color: #7c2e0b; }
+    .content-section { max-width: 850px; margin: 34px 0; }
+    .content-section > h3 { color: var(--blue-deep); }
+    .content-section li + li { margin-top: 8px; }
+    .six-steps { counter-reset: step; display: grid; gap: 10px; padding: 0; list-style: none; }
+    .six-steps li { display: flex; align-items: flex-start; gap: 12px; }
+    .six-steps li::before {
+      counter-increment: step;
+      content: counter(step);
+      display: grid;
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
+      place-items: center;
+      border-radius: 50%;
+      color: white;
+      background: var(--blue);
+      font-weight: 850;
+    }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 24px; align-items: start; }
+    .lesson-card, .scenario-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: var(--shadow); }
+    .lesson-head { padding: 30px clamp(22px, 4vw, 42px); border-bottom: 1px solid var(--line); }
+    .why { margin-top: 20px; padding: 16px 18px; border-radius: 12px; background: var(--blue-soft); color: #183d8d; }
+    .why strong { display: block; margin-bottom: 5px; color: var(--blue-deep); font-size: 1.08rem; }
+    .lesson-body { padding: clamp(20px, 4vw, 40px); }
+    .scenario-card { position: sticky; top: 96px; overflow: hidden; }
+    .scenario-card summary {
+      padding: 18px 20px;
+      color: white;
+      background: var(--blue-deep);
+      cursor: pointer;
+      font-weight: 850;
+      list-style: none;
+    }
+    .scenario-card summary::-webkit-details-marker { display: none; }
+    .scenario-card summary::after { float: right; content: "+"; font-size: 1.35rem; line-height: 1; }
+    .scenario-card[open] summary::after { content: "−"; }
+    .scenario-body { max-height: calc(100vh - 180px); overflow: auto; padding: 20px; font-size: .93rem; }
+    .scenario-body h3 { margin: 4px 0 8px; color: var(--blue-deep); font-size: 1.08rem; }
+    .scenario-body h3:not(:first-child) { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--line); }
+
+    .question {
+      scroll-margin-top: 100px;
+      padding: 26px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .question:first-child { padding-top: 0; }
+    .question:last-child { border-bottom: 0; }
+    .question-number { margin: 0 0 6px; color: var(--orange); font-size: .8rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .helper { margin: 8px 0 18px; color: var(--muted); }
+    .locked { opacity: .55; }
+    .locked-note { display: inline-flex; gap: 8px; align-items: center; margin: 0; color: var(--muted); font-size: .92rem; }
+
+    textarea {
+      width: 100%;
+      min-height: 132px;
+      resize: vertical;
+      padding: 15px 16px;
+      border: 2px solid #b7c1d4;
+      border-radius: 12px;
+      color: var(--ink);
+      background: white;
+      line-height: 1.55;
+    }
+    textarea:focus { border-color: var(--blue); outline: 3px solid rgba(0, 51, 160, .12); }
+    .name-card { max-width: 650px; margin: 0 0 28px; padding: 20px 22px; border: 2px solid #b9c7e5; border-radius: 14px; background: var(--blue-soft); }
+    .name-card label { display: block; margin-bottom: 8px; color: var(--blue-deep); font-size: 1.05rem; font-weight: 850; }
+    .name-card label span { color: var(--orange); font-size: .84rem; text-transform: uppercase; }
+    .name-card input { width: 100%; min-height: 48px; padding: 10px 13px; border: 2px solid #aab7cf; border-radius: 9px; color: var(--ink); background: white; }
+    .name-card p { margin: 8px 0 0; color: var(--muted); font-size: .9rem; }
+
+    .options { display: grid; gap: 12px; margin-top: 16px; }
+    .option-card {
+      display: block;
+      overflow: hidden;
+      border: 2px solid var(--line);
+      border-radius: 14px;
+      background: white;
+      transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease;
+    }
+    .option-card:hover { border-color: #9eb0d6; transform: translateY(-1px); }
+    .option-card.selected { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0, 51, 160, .08); }
+    .option-choice { display: flex; gap: 12px; align-items: flex-start; padding: 16px 17px; cursor: pointer; }
+    .option-choice input { width: 19px; height: 19px; margin: 3px 0 0; flex: 0 0 auto; accent-color: var(--blue); }
+    .option-feedback { padding: 17px; border-top: 1px solid #cfd8ea; background: var(--blue-soft); }
+    .option-feedback p:first-child { margin-top: 0; }
+    .option-feedback p:last-child { margin-bottom: 0; }
+    .feedback-tag { display: inline-block; margin-bottom: 9px; padding: 3px 9px; border-radius: 999px; background: var(--blue); color: white; font-size: .78rem; font-weight: 850; }
+    .feedback-tag.strongest, .feedback-tag.match { background: var(--success); }
+    .feedback-tag.review { background: var(--warning); }
+
+    .check-list { display: grid; gap: 10px; margin: 14px 0 18px; }
+    .check-row { display: flex; gap: 12px; padding: 14px 15px; border: 1px solid var(--line); border-radius: 11px; background: #fbfcff; cursor: pointer; }
+    .check-row input { width: 19px; height: 19px; flex: 0 0 auto; margin: 3px 0 0; accent-color: var(--blue); }
+    .result-box, .saved-box, .reference-box {
+      margin-top: 17px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: var(--success-soft);
+      color: #114e35;
+    }
+    .reference-box { margin: 12px 0 18px; background: #f3f5f9; color: var(--ink); }
+    .reference-box strong { display: block; margin-bottom: 5px; color: var(--blue-deep); }
+
+    .sort-list { display: grid; gap: 15px; }
+    .sort-card { padding: 17px; border: 1px solid var(--line); border-radius: 13px; background: #fbfcff; }
+    .sort-card label { display: block; margin-bottom: 9px; font-weight: 750; }
+    .sort-card select { width: 100%; min-height: 46px; padding: 8px 10px; border: 1px solid #aebbd0; border-radius: 9px; background: white; color: var(--ink); }
+
+    .transfer {
+      margin: 22px 0 0;
+      padding: 19px 21px;
+      border: 1px solid #b7c7ee;
+      border-left: 5px solid var(--blue);
+      border-radius: 12px;
+      background: var(--blue-soft);
+    }
+    .transfer h4 { margin: 0 0 8px; color: var(--blue-deep); font-size: 1.08rem; }
+    .transfer p:first-of-type { margin-top: 0; }
+    .transfer p:last-child { margin-bottom: 0; }
+    .closing-note { margin-top: 22px; padding: 20px; border-radius: 12px; background: #f7f8fb; }
+    .status-table { width: 100%; margin: 18px 0; border-collapse: collapse; font-size: .92rem; }
+    .status-table th, .status-table td { padding: 10px 11px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .status-table th { width: 34%; color: var(--blue-deep); background: var(--blue-soft); }
+    .status-table caption { margin-bottom: 9px; color: var(--blue-deep); font-weight: 850; text-align: left; }
+    .runner-up-box ul { margin-bottom: 0; padding-left: 21px; }
+    .runner-up-box li + li { margin-top: 8px; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 11px; align-items: center; margin-top: 24px; }
+    .button {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 10px;
+      color: white;
+      background: var(--blue);
+      cursor: pointer;
+      font-weight: 800;
+      box-shadow: 0 5px 14px rgba(0, 51, 160, .18);
+    }
+    .button:hover:not(:disabled) { background: #002783; }
+    .button.orange { background: var(--orange); box-shadow: 0 5px 14px rgba(214, 67, 9, .18); }
+    .button.orange:hover:not(:disabled) { background: #b93605; }
+    .button.secondary { border: 1px solid #aab7cf; color: var(--blue-deep); background: white; box-shadow: none; }
+    .button:disabled { opacity: .46; cursor: not-allowed; box-shadow: none; }
+    .screen-nav { display: flex; justify-content: space-between; gap: 14px; margin-top: 22px; }
+    .screen-nav .button { max-width: 70%; }
+    .completion-hint { margin: 13px 0 0; color: var(--muted); font-size: .9rem; text-align: right; }
+
+    .summary-page { padding: clamp(22px, 5vw, 54px); }
+    .summary-toolbar { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 26px; }
+    .summary-identity { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 0 0 24px; padding: 16px 18px; border: 2px solid var(--blue-deep); border-radius: 12px; }
+    .summary-identity span { color: var(--muted); font-size: .82rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .summary-identity strong { display: block; color: var(--blue-deep); font-size: 1.08rem; }
+    .summary-step { break-inside: avoid; margin: 0 0 18px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; }
+    .summary-step h3 { color: var(--blue-deep); }
+    .summary-subtitle { margin: -5px 0 16px; color: var(--muted); font-style: italic; }
+    .student-work { margin: 16px 0; padding: 14px 16px; border-left: 4px solid var(--orange); background: #fff8f4; }
+    .student-work dt { margin-top: 10px; color: var(--muted); font-size: .8rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+    .student-work dt:first-child { margin-top: 0; }
+    .student-work dd { margin: 2px 0 0; white-space: pre-wrap; }
+    .principle { margin: 0; padding-top: 14px; border-top: 1px solid var(--line); }
+    .principle strong { color: var(--blue-deep); }
+    .final-word { margin-top: 28px; padding: 24px; border-radius: 14px; color: white; background: var(--blue-deep); }
+
+    .noscript { max-width: 760px; margin: 40px auto; padding: 24px; border-radius: 12px; background: white; }
+    .restart-dialog { width: min(460px, calc(100% - 32px)); padding: 0; border: 0; border-radius: 16px; color: var(--ink); box-shadow: 0 24px 80px rgba(7, 29, 73, .3); }
+    .restart-dialog::backdrop { background: rgba(7, 29, 73, .62); }
+    .restart-dialog-content { padding: 26px; }
+    .restart-dialog h2 { margin-bottom: 10px; color: var(--blue-deep); font-family: Georgia, "Times New Roman", serif; font-size: 1.6rem; }
+    .restart-dialog p { margin: 0; }
+    .restart-dialog .actions { justify-content: flex-end; }
+    .button.danger { background: #a5260b; }
+    .button.danger:hover:not(:disabled) { background: #7d1c08; }
+
+    @media (max-width: 900px) {
+      .workspace { grid-template-columns: 1fr; }
+      .scenario-card { position: static; grid-row: 1; }
+      .scenario-body { max-height: none; }
+      .at-glance { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .header-inner, .progress-track, main { width: min(100% - 20px, 1180px); }
+      .brand-title { font-size: .94rem; }
+      .save-status { font-size: .76rem; }
+      .header-actions { gap: 8px; }
+      .restart-button { padding: 5px 8px; font-size: .78rem; }
+      main { margin-top: 18px; }
+      .page-card { border-radius: 18px; }
+      .page-banner { padding: 28px 22px; }
+      .opening-body, .lesson-body, .lesson-head, .summary-page { padding-left: 20px; padding-right: 20px; }
+      .screen-nav { flex-direction: column-reverse; }
+      .screen-nav .button { width: 100%; max-width: none; }
+      .completion-hint { text-align: left; }
+    }
+
+    @media print {
+      @page { margin: .55in; }
+      body { background: white; color: black; font-size: 11pt; }
+      .site-header, .screen-nav, .summary-toolbar, .print-hide { display: none !important; }
+      main { width: 100%; margin: 0; }
+      .page-card { border: 0; box-shadow: none; }
+      .page-banner { padding: 0 0 18px; color: black; background: white; }
+      .page-banner::after { display: none; }
+      .page-banner .eyebrow { color: #555; }
+      .page-banner .lede { color: #333; }
+      .summary-page { padding: 0; }
+      .summary-step { padding: 14px 0; border-width: 0 0 1px; border-radius: 0; }
+      .student-work { background: white; }
+      .final-word { padding: 18px 0; color: black; background: white; }
+      a { color: black; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">B</span><span class="brand-title">Building a Policy Brief</span></div>
+      <div class="header-actions"><span class="save-status" id="save-status" aria-live="polite">Loading saved work…</span><button class="restart-button" id="start-over" type="button">Start Over</button></div>
+    </div>
+    <div class="progress-shell"><div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progress-fill"></div></div></div>
+  </header>
+  <main id="app"></main>
+  <dialog class="restart-dialog" id="restart-dialog" aria-labelledby="restart-title"><div class="restart-dialog-content"><h2 id="restart-title">Start over?</h2><p>This will permanently erase the student name and every response saved on this device. This cannot be undone.</p><div class="actions"><button class="button secondary" id="cancel-restart" type="button">Keep my work</button><button class="button danger" id="confirm-restart" type="button">Erase everything and start over</button></div></div></dialog>
+  <noscript><div class="noscript"><strong>This activity needs JavaScript.</strong> Please enable JavaScript in your browser and reopen the page.</div></noscript>
+  <script>
+    const ACTIVITY_SOURCE = "# Building a policy brief: full activity script\n\nExtracted from policy-brief-walkthrough (12). This is every word a student sees, in the order they see it. Nothing has been changed.\n\n---\n\n## Opening screen: Start here\n\n**Before you start** Give this page a couple of minutes before you begin. It covers how your work is saved, and the next section covers what you will be doing and what you will turn in.\n**Your work may not be saved.** Your answers save automatically, but only in this browser on this device, and saving can fail for reasons outside your control. Plan to finish in one sitting if you can.\nYou will lose your work if you switch computers or phones, change browsers, use a private or incognito window, or clear your browsing data.\nFor the same reason, print or save your summary sheet as soon as you reach the end rather than leaving it for later.\nNothing is sent anywhere, and nothing is submitted from this page. To come back later, open this same link, on the same device, in the same browser. Bookmark it now or keep the Canvas link handy.\n**What you will be doing** You will work through the six steps involved in building a policy brief, using one example throughout the activity. Sometimes you write something, and sometimes you choose between versions and find out why each one works or does not.\nThe example focuses on the Nurse Licensure Compact, which affects nurses in a variety of ways, whether you have had a reason to think about it before or not. The scenario takes place in a fictional state, and you will get the details in step one.\nThis is a practice activity. Later, you will use these same six steps to develop a policy brief on the topic you have already selected and submit it in Canvas.\n**What you will turn in from this activity:** Your answers will be collected into a summary sheet as you work, so there is nothing additional for you to assemble. At the end of the activity, print the summary sheet or save it as a PDF and submit it as an appendix with your policy brief.\nThis activity is graded for completion rather than for selecting the strongest answer each time. Answer based on what you think. Choosing an option that turns out not to be the strongest choice can be a valuable part of the learning process, because you will have an opportunity to see why.\n**What a policy brief is** A policy brief is a short document, usually one to three pages, written to one person who has the power to change something. It is what nurses hand to a legislator, a board member, or an executive when they want a decision made.\nA brief does four things:\n\n- says what the problem is and who it affects\n- lays out the realistic options, including leaving things as they are\n- recommends one option and explains why the others fall short\n- asks the reader to do something specific\n\nThe UNC Chapel Hill Writing Center has a short guide worth reading before you draft yours. It makes the point that a brief has to address a problem narrow enough that policy can actually act on it, which usually takes more thought than it sounds like: Policy Briefs, UNC Writing Center.\nThe length, format, and grading requirements for your brief are in Canvas. This activity is about how to think it through.\n**Why this matters** Most nurses never testify at a statehouse, and you may never send anything to an elected official. The habits you practice here are the same ones you use much closer to home: asking your manager to change a protocol that is not working, bringing a staffing concern to your unit council, proposing something at a shared governance meeting, or making a case to a professional organization you belong to.\nFour things carry over no matter who you are talking to:\n\n- Work out who actually has the authority to change something, rather than taking it to whoever is closest or most sympathetic.\n- Say what the problem is in one sentence somebody else can act on.\n- Take the other side seriously enough to answer it instead of brushing it off.\n- Ask for something specific rather than hoping your point was understood.\n\nA legislature is simply the setting with the biggest audience. Most of the time you will be making your case in a meeting down the hall, and the approach is the same.\n**The six steps**\n\n- State the problem\n- Figure out who has the power to change it\n- Map who is affected and who objects\n- Lay out the real options, including doing nothing\n- Choose one and defend the choice\n- Make a specific ask and say how you would know it worked\n\nRead the explanation after every choice, including when you pick the strongest one. The explanations are the useful part.\n\n---\n\n## The scenario (shown in a panel on every step screen)\n\n**About the State of Bliss**\n**About the State of Bliss** We are going to work with a fictional state called Bliss. Bliss is not real, and neither is its legislature. The name is a little tongue in cheek, because policy problems are rarely as simple as they look at first.\nWhy use a fictional state? There are two reasons. First, it gives everyone the same set of facts to work from, whether you practice in a state that has already addressed this issue or one that has not. Second, it keeps this practice activity separate from the topic you will use for your own policy brief. That lets you focus on the process of thinking through a policy issue rather than on the specific content of your own topic.\nThe policy problem itself is real, however. You hold a nursing license, so this one connects directly to your own practice.\n**The situation in Bliss** Bliss has not joined the Nurse Licensure Compact, so a Bliss RN license is valid in Bliss but does not allow a nurse to practice in another state. If a Bliss nurse wants to take an assignment in another state, they must first apply to that state's board for licensure by endorsement. Telehealth works the same way. If your patient is located in another state, that state's requirements determine whether you can provide care to that patient.\nIn our scenario, the Bliss Board of Nursing reports that endorsement applications in other states take 10 to 12 weeks and cost between $250 and $500 each. A rural hospital located 40 minutes from the state line has had three positions open for a year. When wildfires affected the region last summer, nurses from other states volunteered to help but could not obtain licensure in time to provide assistance.\nNo compact legislation has been introduced in Bliss. A group of Bliss nurses wants this to change. That is the issue we will examine throughout this activity. Everything in this activity applies to Bliss rather than to the topic you will use for your own policy brief.\n\n---\n\n## Step one: state the problem\n\n*Why this step matters:*\nEverything else in your brief grows from this one sentence. When the problem is clearly defined, it becomes much easier to identify meaningful options and develop a specific policy recommendation. This is also one of the places where policy briefs go off track, so we are going to take some time with it.\n\n### 1. [write] Before you see any examples, write the problem in Bliss as one sentence.\n\n*Helper text:*\nWrite it in your own words. There is no model to copy yet, and that is intentional. We want to see how you approach the problem before looking at examples.\n*Placeholder text in box:* In Bliss, the problem is that...\n*Button:* Save my sentence and continue\n*After they submit:*\nYour sentence is saved.\nNext, you will read four sample statements about this same problem. None of them is your own. Read all four, choose the one you think is strongest, and then we will come back to your original sentence.\n\n### 2. [choice] Which of these four is the strongest problem statement?\n\n*Helper text:*\nThese are four sample statements about the situation in Bliss, written by other people. Your own sentence is saved, and you will return to it in a moment.\n\n- **Option:** Licensure rules in Bliss are outdated and create unnecessary confusion for nurses who want to work in more than one state.\n\n   This statement describes how the system feels, but it does not identify the specific problem or its consequences. Words like outdated and confusing sound analytical, but they do not tell your reader who is affected or what the impact is.\n\n   As you read policy statements, watch for adjectives that are doing the work that evidence should be doing. Outdated, confusing, broken, and inefficient all have a place, but only with evidence behind them.\n\n\n- **Option:** Many nurses in Bliss are frustrated because they have to apply for a second license, complete more paperwork, and wait for approval before they can take an assignment somewhere else. This can be discouraging for nurses who are trying to grow their careers and take advantage of new opportunities.\n\n   More detail does not make a problem statement stronger. This statement identifies who is affected and describes the process, but the consequences it names are frustration and discouragement rather than measurable impacts.\n\n   That frustration is real and it matters. For a policy brief, though, it is also worth asking what the frustration represents. What is the problem costing, and who is affected by those consequences?\n\n\n- **Option:** Bliss nurses have to hold a separate license in every state where they practice, at 10 to 12 weeks and $250 to $500 each, which has left border hospital positions unfilled and kept volunteers out of last summer's wildfire response. **(strongest)**\n\n   This one is the strongest. It identifies who is affected, what is causing the problem, how much time and money are involved, and two specific consequences that matter beyond the individual nurse.\n\n   Notice that it is not longer than the previous option. It is more specific. Every phrase is carrying a fact rather than an impression, and that is the difference between detail and evidence.\n\n   Notice too what it does not do. It never says what should be done about the problem. That is intentional, and the next option shows why.\n\n\n- **Option:** Bliss should join the Nurse Licensure Compact.\n\n   This is a very common starting point, so it is worth a closer look. This statement gives us a solution, not a problem.\n\n   When you begin with your preferred solution, it is easy to stop weighing other options before you have really looked at them. A reader who does not yet agree with your recommendation also has little reason to keep reading. Establish the problem first, then let your recommendation emerge from your analysis.\n\n\n\n### 3. [selfcheck] Now look back at your own sentence.\n\n*Helper text:*\nCheck anything your sentence already includes, then choose Check my sentence.\n*Button:* Check my sentence\n*Checkboxes:*\n\n- Mine identifies who is affected.\n- Mine identifies what is causing the problem.\n- Mine includes a number, timeframe, or other indication of scale.\n\n*If they check 0:* Checking none of these on a first attempt is very common, and it is completely okay. A strong problem statement develops as you learn which elements belong in it.\n*If they check 1:* Checking one on a first attempt is very common, and it is completely okay. A strong problem statement develops as you learn which elements belong in it.\n*If they check 2:* Two of the three on a first attempt is a solid start. The piece most people leave out is scale, because it is the one that usually requires going and finding a number.\n*If they check 3:* All three on a first attempt is uncommon, so that is worth noticing. Read your sentence once more against the examples above and make sure each of the three pieces is doing real work rather than being implied.\n*Then:*\nNow you know the three key pieces. Use them to revise your Bliss sentence in the next question. Your original and revised sentences will both appear on your summary sheet.\n\n### 4. [write] Revise your problem statement using what you have learned.\n\n*Shows back to student:* Your original problem statement, for reference\n*Helper text:*\nMake sure your revised sentence identifies who is affected, what is causing the problem, and the scale or impact.\n*Placeholder text in box:* In Bliss, the problem is that...\n*Button:* Save my revised problem statement\n*After they submit:*\nYour revised problem statement is saved.\n\n> **Carry this into your own brief**\n\n> When you write your own brief, develop the problem statement before you settle on your recommendation. That keeps you analyzing the policy issue rather than advocating for a solution you have already chosen.\n\n---\n\n## Step one, continued: back it with evidence\n\n*Why this step matters:*\nA clear problem statement makes a claim. The next question your reader will have is how you know. Not every source answers that question, and part of building a brief is recognizing which source does which job.\n\n### 1. [choice] Every claim in a brief needs evidence behind it. Which source does the most work here?\n\n*Helper text:*\nAll four are sources you could cite. Only one tells you how widespread the problem is and what impact it is having.\n\n- **Option:** A coworker's story about waiting three months for an out-of-state license while a job offer expired.\n\n   This is useful information, just not for this particular purpose. One person's experience shows that something happened, but it cannot tell your reader how common the problem is or whether this was an unusual situation.\n\n   Personal stories earn their place in a policy brief, especially when you want your reader to understand the human side of an issue. They work best paired with broader evidence.\n\n\n- **Option:** Bliss Board of Nursing data on endorsement processing times and application volume over the past three years. **(strongest)**\n\n   This one is the strongest. It comes from the agency responsible for the process, it covers both processing time and volume, and three years of data shows whether this is an ongoing pattern rather than one bad stretch.\n\n   When you are evaluating how a process is working, data from the agency that runs that process is the hardest evidence for a reader to dismiss.\n\n\n- **Option:** A survey showing that 78 percent of Bliss nurses support joining the compact.\n\n   This tells us about opinion rather than the extent or impact of the problem. Knowing that nurses support a change is useful, but support does not establish that the change is needed.\n\n   Support data earns its place later in your brief, particularly when you consider whether a proposed change can realistically move forward. It serves a different purpose from evidence that establishes the problem itself.\n\n\n- **Option:** The number of states that currently participate in the compact.\n\n   This is useful background, worth a sentence. It shows that Bliss is different from many other states and may prompt your reader to ask why.\n\n   Being different, however, does not mean there is a problem. A state can be an outlier for many reasons. On its own, this does not tell us what the policy is costing or what consequences it is creating.\n\n\n\n> **Carry this into your own brief**\n\n> Background helps your reader understand the situation. Evidence demonstrates that the situation is creating a real problem. Your brief needs both, and the two are not interchangeable.\n\n---\n\n## Step two: figure out who has the power to change it\n\n*Why this step matters:*\nYour brief needs to reach someone who has the authority to act. Before you can identify that person, you need to determine what controls the issue: a state law, an agency rule, or an organization's own policy. Knowing where the authority sits tells you who to address and what kind of policy change is possible. You may hear this described as finding the lever, meaning the point where action can actually change the problem.\n\n### 1. [choice] What controls whether Bliss joins the compact?\n\n- **Option:** Federal regulation through a national health agency.\n\n   Licensure is regulated by the states, not the federal government, so a federal health agency has no authority to decide whether Bliss joins the compact.\n\n   This distinction is worth carrying into your own policy work. A brief has to reach the right level of government. When the issue and the decision-maker do not match, even a well-developed brief has nowhere to land, and licensure and scope of practice are almost always state matters.\n\n\n- **Option:** State law passed by the legislature. **(strongest)**\n\n   This one is correct, and it is a fact rather than a judgment call. A state joins the Nurse Licensure Compact by passing legislation. Until that legislation passes, the state cannot join.\n\n   That single fact shapes much of your brief: who you write to, what you ask for, and what kind of timeline is realistic.\n\n\n- **Option:** An internal rule the Bliss Board of Nursing can adopt on its own.\n\n   The board oversees nursing licensure, and legislators often pay close attention to the board's perspective. The board cannot join the compact on its own, though. Legislative action is required.\n\n   The board is still an important voice in the process. A group does not need final decision-making authority to influence the person who has it, and that comes up in the next question.\n\n\n- **Option:** Policy set by the hospitals that employ Bliss nurses.\n\n   Hospitals feel this problem, especially the border hospital with three unfilled positions, but they have no authority to change state licensure requirements.\n\n   Being affected by a policy problem and being able to change it are two different things. Keeping those roles separate will help you identify the right audience for your brief.\n\n\n\n> **Carry this into your own brief**\n\n> Settle the level of government first, then work out who within it can act. That order will narrow your list faster than starting from whoever sounds most powerful.\n\n### 2. [choice] Your brief goes to one named person. Who should it be?\n\n- **Option:** The chief nursing officer at the hospital where you work.\n\n   Your CNO may care about this issue and could be a valuable ally. The CNO cannot pass state legislation, though.\n\n   It is tempting to take an issue to someone who cares about it. The most useful audience is usually the person with the authority, or the influence, to move the issue forward.\n\n\n- **Option:** The president of the Bliss Hospital Association.\n\n   This is a closer choice and could be useful. A hospital association can lobby the legislature and help build support for the issue.\n\n   Influence and authority are not the same thing, though. The association can persuade the decision-maker, but it cannot pass the legislation itself. You can write to an ally on purpose, as long as your request reflects what that person or organization can actually deliver, which here is pressure rather than passage.\n\n\n- **Option:** The state senator who chairs the legislature's health and welfare committee. **(strongest)**\n\n   This one is the strongest. A committee chair controls whether a bill gets a hearing at all, and that is where a great many bills stop moving without anyone voting on them.\n\n   Notice the level of specificity. Not the legislature, not a senator, but the person whose particular role gives them influence over the exact step where your issue is stuck.\n\n\n- **Option:** The regional administrator for the federal agency that oversees health programs.\n\n   This follows from what we established in the earlier question. If nursing licensure is a state responsibility, a federal administrator has nothing to act on.\n\n   Settle the level of government first, then use that to narrow down the people who can act.\n\n\n\n> **Carry this into your own brief**\n\n> Keep two questions separate when you identify your audience: who has the authority to make the decision, and who can influence the person who makes it? Either can be the right audience, as long as your request matches their role.\n\n*Closing text on this screen:*\n**Passing a law and putting it in place are not the same thing** Bliss is fictional, but the Nurse Licensure Compact is real, and the states outside it are not all in the same position. Where a state sits in this sequence changes what there is to ask for.\nJurisdictions outside the Nurse Licensure Compact, grouped by statusNo legislation introducedAlaska, American Samoa, California, Hawaii, Illinois, Minnesota, Nevada, New York, Northern Mariana Islands, OregonLegislation pendingDistrict of Columbia, MichiganPassed, waiting to take effectMassachusetts, Virgin IslandsPassed, partly in effectGuamAsking a legislator to introduce a bill is a different request from asking for a vote on a bill that already exists, and both are different from asking an agency to fund a law that already passed. Match your ask to where the issue actually is.\nAs you move through your own policy brief, pay attention to where your issue sits in the policy process and make sure your recommendation matches that stage.\nStatus as of September 2026. Check current membership at nursecompact.com before using this anywhere else.\n\n---\n\n## Step three: map who is affected\n\n*Why this step matters:*\nSo far we have looked at the problem and at who can fix it. A brief that stops there is a brief about nurses, written for nurses. The person you are writing to is weighing more than one interest at once. Some of the people affected by this problem will help you, some will push back, and some have a great deal at stake and no idea the conversation is happening.\n\n### 1. [sort] Place each of these five groups in the category that best describes where they are likely to stand on Bliss joining the compact.\n\n*Helper text:*\nA few could reasonably fit more than one category. Choose the best fit, then read the explanation for each group.\n*Button:* Check my choices\n*Categories:* Would likely support | Would likely resist | Affected, but not in the room\n\n- **Group (correct bin: Would likely support):** The rural hospital 40 minutes from the state line\n\n   Three positions have been open for a year. Joining the compact widens the pool of nurses who can fill them without a 10 to 12 week wait.\n\n   This is the most direct beneficiary in the scenario, and an ally worth having, because an organization with a number attached to its interest can supply evidence you do not have. The hospital can tell a legislator what a year of unfilled positions has cost in overtime and closed beds.\n\n\n- **Group (correct bin: Would likely resist):** The Bliss Nurses Association, the state's largest professional and labor organization for nurses\n\n   This one surprises people, and it is the most useful item on the list.\n\n   In several states, nurses associations and nursing unions have opposed compact legislation. Their objections have been consistent: that the board of nursing is funded largely by its own licensing fees and would lose revenue, that a state gives up the ability to review every nurse who practices within its borders, and that checking disciplinary history in remote states is harder than it sounds.\n\n   Whether you find those objections persuasive is a separate question from whether they exist. Do not assume an organization is with you because its members are the people you are writing about. Find out.\n\n\n- **Group (correct bin: Affected, but not in the room):** Nurses who practice only in Bliss and have no plans to work anywhere else\n\n   It is easy to assume every nurse wants this. Nurses who work one job in one state get no travel benefit from the change, and they may carry part of its cost. When boards project a revenue loss, one of the ways states have discussed closing the gap is raising licensing fees on everyone who remains.\n\n   They are affected, they are numerous, and nobody is asking them. That combination is worth noticing, because a large group that finds out late is where opposition tends to come from.\n\n\n- **Group (correct bin: Affected, but not in the room):** Patients in border communities who use telehealth\n\n   A nurse has to be licensed in the state where the patient is located at the time care is provided, and that applies to telehealth exactly as it applies to care at the bedside. Whether a Bliss nurse can care for a patient over video depends on which side of the line that patient is sitting on.\n\n   Those patients carry the consequence of this policy directly and almost never appear in the debate about it. When you write your own brief, look for that group. Naming them is often what moves a reader who is unmoved by professional convenience.\n\n\n- **Group (correct bin: Would likely support):** A national travel nurse staffing agency\n\n   They would support it, and enthusiastically. Compact licensure makes their business easier.\n\n   This one is worth thinking about carefully. An ally with an obvious financial stake can help you and can also make your argument easier to dismiss. If your brief leans on a supporter who profits from the outcome, expect your reader to notice. Use them for what they know, and build your case on evidence that does not depend on them.\n\n\n\n> **Carry this into your own brief**\n\n> Identify the people and groups connected to your own issue: those likely to support it, those likely to resist it, and those who are affected but may not be included in the discussion. Check your assumptions about the first two, because the group you expected to support you is not always the group that does. Look hardest at the third category, since the absent group is often where your strongest argument is, and also where your opposition comes from if they hear about it late.\n\n---\n\n## Step three, continued: take the objection seriously\n\n*Why this step matters:*\nEvery recommendation worth making has a real cost to somebody. A brief that pretends otherwise tells your reader you have not thought it through, or that you are hoping they will not. The strongest objection is not the loudest one. It is the one that survives being checked.\n\n### 1. [choice] A Bliss legislator raises each of these. Which is the strongest objection to joining the compact?\n\n*Helper text:*\nStrongest means the one that holds up when you look into it, not the one that sounds most alarming.\n\n- **Option:** Nurses licensed in other states may not be as well prepared as nurses Bliss licenses itself.\n\n   This one falls apart on inspection. Every compact state has adopted the same set of uniform licensure requirements, covering education, the NCLEX, English proficiency, and state and federal fingerprint-based criminal background checks. A nurse practicing in Bliss under a multistate license has met those requirements.\n\n   Objections resting on an unexamined assumption about quality are common, and they are the easiest kind to answer. Check whether a claim is true before you build a response to it.\n\n\n- **Option:** Every nurse in Bliss would have to complete and pay for a fingerprint background check they do not need today.\n\n   This sounds strong, and it is only partly true, which is what makes it worth slowing down on.\n\n   The fingerprint-based background check is one of the uniform requirements, but it applies to nurses who apply for a multistate license. When a state implements the compact, existing licenses remain valid as single-state licenses, and a nurse who never intends to practice elsewhere is not required to convert.\n\n   So the cost is real for nurses who want the multistate license, and it is not universal. Knowing that distinction lets you answer the objection rather than concede it. An objection that is half right is more dangerous than one that is wrong, because the half that is right makes the rest sound credible.\n\n\n- **Option:** Bliss would have to recognize licenses issued by states whose standards and discipline practices Bliss does not control.\n\n   This one is real, and it has real answers. Compact states share the same uniform licensure requirements, a state keeps authority over practice inside its own borders, and it can act against a nurse's privilege to practice there.\n\n   Something is still given up. Bliss would no longer review case by case who may practice within its borders, and enforcement depends partly on other states reporting promptly. This is a strong objection and your brief would need to address it.\n\n   It is not the strongest one here, though, because it is an argument about authority in principle. The option about board funding attaches a number to a group of people, and that is harder to answer.\n\n\n- **Option:** The Bliss Board of Nursing is funded by its own licensing fees. If nurses shift to multistate licenses and out-of-state nurses stop applying for Bliss licenses, board revenue drops, and the gap gets closed by raising fees on the nurses who never leave Bliss. **(strongest)**\n\n   This is the strongest one. It survives checking, it comes with numbers, and it names who pays.\n\n   It is not hypothetical either. In states that have debated joining, fiscal analyses have projected six-figure annual revenue losses to the board, and raising licensing fees on remaining licensees has been discussed as the way to cover the gap. Nurses associations have built part of their opposition on this point.\n\n   Notice who bears the cost. It is the group you identified a moment ago as affected but not in the room: the nurses who work one job in one state, get no benefit from the change, and are not at the hearing. An objection that lands on an absent group is the hardest kind to answer, because nobody in the room is speaking for them.\n\n\n\n> **Carry this into your own brief**\n\n> Before you answer an objection, find out whether it is true. Objections come in three kinds: wrong, half right, and sound. Each needs a different response, and treating all three the same way is how a brief loses a reader who was listening. When an objection comes with a number and a named group, treat it as the one your brief has to answer.\n\n### 2. [write] Write one sentence responding to the funding objection without dismissing it.\n\n*Recalls:* The objection you are answering\n*Helper text:*\nYou are not trying to win here. You are trying to show your reader that you understand what they are being asked to weigh.\n*Placeholder text in box:* The funding concern is real, and...\n*Button:* Save my response and continue\n*After they submit:*\nYour response is saved.\nNext you will read four other responses to the same objection, written by other people. Yours will stay on screen so you can hold it up against them as you read.\n\n### 3. [choice] Which of these responses takes the objection seriously?\n\n*Shows back to student:* Your response, for reference\n*Recalls:* The objection you are answering\n*Helper text:*\nThese four were written by other people. Yours is shown above so you can review it alongside them. It is not one of the choices.\n\n- **Option:** The states that already joined have not run into this problem, so it is not something the committee needs to spend much time on. Their boards are still operating and their nurses are still licensed, which tells you the concern has not actually materialized.\n\n   This may even be true, but stated this way it is an assertion rather than an answer. Your reader has no reason to accept it, and it signals that you would rather move past the objection than engage with it.\n\n   If you have evidence that other states did not see this happen, that evidence is your response. The claim without it is not.\n\n\n- **Option:** That is a fair concern, and I would not want to see the board underfunded over this. It may be that the responsible course is to hold the bill until the financial picture is clearer, then bring it back in a future session.\n\n   This takes the objection seriously and then hands over the argument. Acknowledging a cost does not require abandoning your recommendation.\n\n   Watch for this one in your own writing. It tends to show up when you are worried about seeming pushy, and it reads to a decision-maker as though you are not sure yourself.\n\n\n- **Option:** The board's revenue would change, and the bill should address that rather than leave it to a later fee increase. Its workload changes too, since it would stop processing endorsement applications. I would ask the committee to require a funding analysis so the cost does not land on nurses who never leave Bliss. **(strongest)**\n\n   This is the strongest response. It concedes what is real, adds a fact that complicates the objection rather than dismissing it, and turns the concern into a specific thing the legislator can do.\n\n   Notice that it does not claim the objection is groundless, and notice who it protects. The nurses who would absorb a fee increase have no voice in the hearing, so your brief speaks for them. That is more persuasive than confidence, because it shows your reader you already did the thinking they were about to do.\n\n\n- **Option:** The organizations raising this objection have reasons of their own for wanting things to stay as they are, and the committee should keep that in mind. The funding argument is really about protecting the position they already hold under the current system.\n\n   Even where there is something to this, saying it costs you your reader. You have moved from the issue to the motives of the people who disagree, which invites your reader to wonder about yours.\n\n   Address the objection, not the objector. If an opposing interest is relevant, show it through what the objection leaves out rather than by naming the motive.\n\n\n\n### 4. [write] Review your response and save your final version.\n\n*Shows back to student:* Your original response, for reference\n*Helper text:*\nRevise your response using what you learned, or keep it if you believe it already addresses the objection fairly.\n*Placeholder text in box:* The funding concern is real, and...\n*Button:* Save my final version\n*After they submit:*\nYour final version is saved.\n\n> **Carry this into your own brief**\n\n> Answer the strongest objection in your own brief, in writing, before your reader raises it. Concede what is real, add what complicates it, and turn the concern into something specific your reader can act on. A reader who watches you handle the hard part fairly will trust the rest of your argument.\n\n---\n\n## Step four: build the option set\n\n*Why this step matters:*\nBy now you know what the problem is and who can act on it. The temptation at this point is to write down your recommendation and move on. A brief that offers one option is not making an argument, it is making a request. Your reader has to choose, and choosing means seeing what the alternatives were and why they came up short. That includes the alternative your reader is living with right now.\n\n### 1. [multi] Seven things have been suggested. Check the ones that belong on the option list in your brief.\n\n*Helper text:*\nAn option belongs on the list if it is something your reader could actually choose. Check as many as apply, then see how your list compares.\n*Button:* Check my list\n\n- **Item (belongs on the list):** Join the Nurse Licensure Compact\n\n   This is the option the Bliss nurses started with, and it belongs on the list. Notice that it is on the list rather than at the top of it. Your recommendation comes from comparing the options, not from deciding first and then assembling a list around the decision.\n\n\n- **Item (belongs on the list):** Keep separate licensure, but require the board to decide endorsement applications within 30 days and cap the application fee\n\n   This one belongs, and it is the option students most often miss.\n\n   It attacks the same problem from a different direction. If the delay and the cost are what hurt, a state can shorten the delay and lower the cost without joining anything. Pennsylvania does something related, issuing extraterritorial licenses to providers who practice in adjoining states.\n\n   An option that addresses your problem by a smaller route deserves a place on the list. Leaving it off makes your brief look like advocacy for a predetermined answer.\n\n\n- **Item (belongs on the list):** Create a telehealth registration so nurses licensed elsewhere can care for Bliss patients by video without full Bliss licensure\n\n   This belongs on the list. Several states have built exactly this. Florida, Arizona, Vermont, Delaware, and Colorado have registration pathways that let an out-of-state provider treat residents by telehealth without obtaining a full license, usually with conditions attached.\n\n   It is a partial solution, which is not the same as a bad one. Partial options belong on the list so your reader can see the whole range and understand what a narrower fix would and would not accomplish.\n\n\n- **Item (belongs on the list):** Add a disaster licensure provision letting nurses licensed elsewhere practice in Bliss during a declared emergency\n\n   This belongs, and it comes with a complication worth knowing about. Many states issue temporary disaster permits, and nearly every state and territory belongs to the Emergency Management Assistance Compact, which honors licenses across state lines during a governor-declared emergency.\n\n   So part of the wildfire problem may already have a mechanism, but only part. EMAC moves people through their own state's emergency management agency as a coordinated deployment. A nurse who sees the news and drives over to help is not deploying through EMAC, and the nurses in our scenario volunteered on their own.\n\n   This is worth the trouble because it shows you something about your own topic. An option can look new and turn out to overlap with something already on the books. Find out before you propose it.\n\n\n- **Item (belongs on the list):** Leave the current requirements in place\n\n   This one belongs on every option list you will ever write, and it is the one people leave off.\n\n   Doing nothing is a choice your reader can make, and it is the choice they are making right now. If your brief does not say what the status quo costs, you have left your reader's easiest option unexamined, which makes it look free.\n\n   It also protects you. A brief that takes the status quo seriously reads as analysis. A brief that refuses to name it reads as a pitch.\n\n\n- **Item (does not belong):** Ask the border hospital to raise wages until the three positions fill\n\n   This might even work. It does not belong on this list.\n\n   Think back to step two. Your brief is going to a state senator who chairs a legislative committee. Wages at one hospital are not something that senator can set. An option your reader has no authority to choose is not an option, it is a suggestion addressed to somebody else.\n\n   If you find yourself thinking this is the better answer, that is worth paying attention to rather than brushing aside. It may mean the person who can actually solve your problem is someone other than the one you settled on in step two, and that is a useful thing to learn early.\n\n\n- **Item (does not belong):** Join the compact and require every Bliss nurse to convert to a multistate license\n\n   Nobody has proposed this, and it is not how joining works. As you saw in step three, existing licenses stay valid as single-state licenses and the multistate license is something a nurse applies for.\n\n   So what is it doing on the list? It is the real option with a burden bolted onto it, which makes ordinary compact membership look moderate by comparison. That is the most common form of padding, and it is harder to spot than an obviously silly option because it sounds like something a legislature might do.\n\n   A reader who knows the subject will notice, and once they do, they will wonder what else on your list was arranged rather than found. If an option is there only to lose, take it off.\n\n\n\n> **Carry this into your own brief**\n\n> An option belongs on your list if your reader could actually choose it. Include the status quo every time, include the smaller fixes that address your problem by a narrower route, and leave off anything that exists only to lose. Your reader will judge your recommendation partly by the company you put it in.\n\n---\n\n## Step four, continued: weigh the options against the problem\n\n*Why this step matters:*\nYou now have five real options. Comparing them is not a matter of deciding which one you like. It is a matter of going back to the problem you wrote in step one and asking what each option would actually fix. An option that solves part of your problem is not a failure. It is a partial solution, and saying so plainly is what lets your reader trust you on the rest.\n\n### 1. [choice] Go back to the problem in Bliss. Which option does the most to address it?\n\n*Shows back to student:* Your revised problem statement, for reference\n*Helper text:*\nThe problem had three pieces: the wait and the cost of a second license, three unfilled positions at the border hospital, and volunteers who could not help during the wildfires.\n\n- **Option:** Require the board to decide endorsement applications within 30 days and cap the fee.\n\n   This one helps, and it helps with the piece the Bliss nurses feel most directly. A 30 day decision and a lower fee would take real weight off a nurse considering an out-of-state assignment.\n\n   What it leaves behind is the second license itself. A nurse still applies, still waits, still pays, and does it again for the next state. The border hospital's hiring pool is still limited to nurses willing to go through that.\n\n   A faster version of a burden is not the same as removing it. Say so when you write about an option like this, because your reader will work it out anyway.\n\n\n- **Option:** Create a telehealth registration for nurses licensed elsewhere.\n\n   This solves one piece cleanly and leaves the rest untouched.\n\n   Patients in border communities would gain access to nurses across the line, which matters, because the current rule turns on where the patient is sitting. But a telehealth registration does nothing for the three unfilled positions at the hospital, which are bedside jobs, and nothing for nurses trying to take a physical assignment somewhere else.\n\n   Notice how specific that is. When you compare options in your own brief, name the piece each one fixes rather than calling it partial and moving on.\n\n\n- **Option:** Add a disaster licensure provision for declared emergencies.\n\n   This is the narrowest of the four, and it is worth being honest about why.\n\n   It addresses the wildfire piece, which is the most vivid part of the scenario and the smallest part of the problem. Three positions have been open for a year. The wildfires lasted a season. An option that answers the story your reader remembers while leaving the ongoing problem in place is a real risk in policy writing.\n\n   It may also overlap with mechanisms already in place through interstate mutual aid agreements.\n\n\n- **Option:** Join the Nurse Licensure Compact. **(strongest)**\n\n   This one does the most, and it is worth being precise about why rather than saying it is the best.\n\n   It addresses all three pieces. Nurses stop applying for a second license, the hospital's hiring pool widens to every compact state, and nurses licensed in other compact states can practice in Bliss during an emergency without a temporary permit.\n\n   It also carries the largest cost, which you worked through in step three. The option that does the most is not automatically the one you recommend. It is the one you have to justify most carefully.\n\n\n\n> **Carry this into your own brief**\n\n> Compare every option against the problem you wrote in step one, piece by piece. Name what each one fixes and what it leaves, including for the option you plan to recommend. A reader who sees you state your own option's limits will believe you about the others.\n\n### 2. [write] Write one sentence saying what doing nothing would cost Bliss.\n\n*Helper text:*\nDescribe the status quo the way you would describe any other option, as something with consequences rather than as a failure.\n*Placeholder text in box:* If Bliss leaves the current requirements in place...\n*Button:* Save my sentence and continue\n*After they submit:*\nYour sentence is saved.\nNext you will read four versions of the same thing, written by other people. Yours will stay on screen so you can hold it up against them as you read.\n\n### 3. [choice] Which version of the do-nothing option is fairest?\n\n*Shows back to student:* Your version, for reference\n*Helper text:*\nThese four were written by other people. Yours is shown above so you can review it alongside them. It is not one of the choices.\n\n- **Option:** Doing nothing is not a serious option here.\n\n   This is not a description of the status quo. It is a refusal to provide one.\n\n   Your reader can do nothing, very easily, at no political cost. Telling them their easiest choice is not serious does not remove it from the table. It just means your brief has nothing to say about the option they are most likely to take.\n\n\n- **Option:** Bliss could leave the current requirements in place, which avoids the cost and disruption that come with any change.\n\n   This is fair to the status quo and unfair to everything else, which is the mirror image of the usual problem.\n\n   It names what doing nothing preserves and says nothing about what it costs. A reader who only has this has no reason to act. If you catch yourself writing the status quo this way, check whether you are being even-handed or whether you have quietly changed your mind.\n\n\n- **Option:** Bliss could leave the current requirements in place. The border hospital's three positions would likely stay open, telehealth would stay limited by where the patient is sitting, and the board would keep its endorsement fee revenue and its current workload. **(strongest)**\n\n   This is the fairest version. It gives the status quo the same treatment as every other option: what it costs, and what it preserves.\n\n   Notice the last clause. The board keeps its revenue, which is a real advantage of doing nothing, and it is the same concern that made the funding objection so strong in step three. Naming it here costs you nothing and shows your reader you are describing the choice rather than steering it.\n\n\n- **Option:** Bliss could do nothing and continue failing the nurses and patients who depend on this system.\n\n   Look at what is doing the work in that sentence. Failing is an adjective standing where evidence should be, which is the same problem as the first problem statement you looked at in step one.\n\n   A reader who disagrees with you now has something to push back on that has nothing to do with the facts. Loaded language invites an argument about your tone instead of the policy.\n\n\n\n### 4. [write] Review your sentence and save your final version.\n\n*Shows back to student:* Your original sentence, for reference\n*Helper text:*\nRevise your sentence using what you learned, or keep it if you believe it already describes both the costs and advantages of doing nothing.\n*Placeholder text in box:* If Bliss leaves the current requirements in place...\n*Button:* Save my final version\n*After they submit:*\nYour final version is saved.\n\n> **Carry this into your own brief**\n\n> Write the status quo the way you would write any other option, with its costs and its advantages both named. It has advantages, or your reader would have acted already. Saying so is what makes the rest of your comparison credible.\n\n---\n\n## Step five: commit\n\n*Why this step matters:*\nYou have five options, and you know what each one would fix. Now you have to pick one and put your name on it. This is the step where briefs go soft. It is more comfortable to lay out the options fairly and let your reader draw their own conclusion, and it feels like the more objective thing to do. It is not. A brief that will not recommend anything hands the decision back to the person who asked you for help.\n\n### 1. [choice] Which option would you recommend to the committee chair?\n\n*Helper text:*\nThere is no single right answer here. All four are defensible. Pick the one you would actually argue for, then read what defending it would require.\n\n- **Option:** Join the Nurse Licensure Compact\n\n   This is the option that does the most, and that is the easiest part of your case.\n\n   Defending it means carrying the largest cost. You would be asking a legislator to accept the board funding problem you worked through in step three, which lands on nurses who get no benefit from the change and are not at the hearing. If you recommend this, your brief has to say so out loud and propose something about it.\n\n   You would also be asking for the biggest change, which takes the longest. Be ready for a reader who agrees with you and still wants to know why not something smaller this session.\n\n\n- **Option:** Require the board to decide endorsement applications within 30 days and cap the fee\n\n   This is the pragmatic recommendation, and there is nothing second-rate about it.\n\n   Defending it means explaining why you are not recommending the option that does more. That is a harder argument than it sounds, because your own problem statement described consequences this option does not fix. The three positions at the border hospital are still limited to nurses willing to hold two licenses.\n\n   The honest version of this defense usually rests on what can pass and what can pass soon. If that is your argument, make it explicitly rather than letting your reader assume you did not notice the gap.\n\n\n- **Option:** Create a telehealth registration for nurses licensed elsewhere\n\n   This is the narrowest of the three active recommendations, and it has a real constituency: the border patients who cannot be seen because of where they are sitting.\n\n   Defending it means defending the scope. You would be recommending something that does nothing for the hospital's three vacancies, which was the most concrete piece of your problem. Either you argue that the telehealth piece is the most urgent, or you present this as a first step and say what comes after.\n\n   A narrow recommendation is not a weak one. An unacknowledged narrow recommendation is.\n\n\n- **Option:** Leave the current requirements in place\n\n   You can recommend the status quo, and sometimes it is the right call. It is also the hardest defense on this screen, and it is worth understanding why.\n\n   Your own problem statement in step one described a real cost: unfilled positions, a wait, a fee, and a wildfire response that could not use the help it was offered. Recommending no change means arguing that those costs are smaller than the costs of fixing them.\n\n   That argument can be made. It just has to be made, and against your own earlier analysis. If you chose this one because none of the alternatives felt comfortable, that is a different thing from concluding the status quo is best.\n\n\n\n### 2. [write] In one sentence, explain what you would need to acknowledge or address to defend this recommendation.\n\n*Shows back to student:* Your selected recommendation, for reference\n*Helper text:*\nKeep it brief. Think about the recommendation's cost, limits, or the strongest reason someone might prefer another option.\n*Placeholder text in box:* To defend this recommendation, I would need to acknowledge or address...\n*Button:* Save my response\n*After they submit:*\nYour response is saved.\n\n> **Carry this into your own brief**\n\n> A brief has to recommend something. Which option you choose matters less than whether your reader can see that you chose it on purpose, knowing what it costs and what it leaves undone. Pick the one you can defend honestly, not the one that is easiest to defend.\n\n---\n\n## Step five, continued: defend it\n\n*Why this step matters:*\nA recommendation on its own is a preference. What turns it into an argument is the comparison: why this one, and not the one your reader was going to ask about. Your reader will have a runner-up in mind whether you name it or not, and naming it first is how you stay in control of the conversation.\n\n### 1. [write] Write one sentence saying why you would not recommend the runner-up.\n\n*Helper text:*\nFrom here we work with one recommendation, joining the compact, so everyone is looking at the same thing. That is the same reason we have been using Bliss all along. If you picked something else, the structure of the defense is identical and only the content changes. The runner-up for the compact recommendation is the faster, cheaper endorsement process. Say what it would accomplish before you say what it would not.\n*Placeholder text in box:* Faster endorsement processing would...\n*Button:* Save my sentence and continue\n*After they submit:*\nYour sentence is saved.\nNext you will read four versions of the same argument, written by other people. Yours will stay on screen so you can hold it up against them as you read.\n\n### 2. [choice] Which of these defends the recommendation best?\n\n*Shows back to student:* Your version, for reference\n*Helper text:*\nThese four were written by other people. Yours is shown above so you can review it alongside them. It is not one of the choices.\n\n- **Option:** Joining the compact is the right move for Bliss nurses and for the patients who depend on them, and the legislature should act this session.\n\n   Read that again and ask what a reader learns from it. It repeats the recommendation with more conviction, which is not the same as defending it.\n\n   There is no comparison here, no cost named, and nothing a reader who prefers a different option would have to answer. Conviction is not evidence, and a reader who came in unconvinced leaves the same way.\n\n\n- **Option:** Faster endorsement processing would not solve this problem. Only full compact membership addresses what Bliss nurses are dealing with.\n\n   This names the runner-up and then waves at it, which is worse than not naming it at all.\n\n   Faster processing would solve part of the problem, and your reader knows that, because it is obvious. Saying it would not solve anything tells your reader you are willing to shade the facts when they are inconvenient, which makes them wonder about the rest of your brief.\n\n\n- **Option:** A 30 day decision and a capped fee would cut the wait and the cost for nurses taking out-of-state assignments, which is real relief. It would not change the fact that a nurse needs a second license at all, so the border hospital would still be recruiting from the narrower pool that has left three positions open for a year. Compact membership is the option that reaches that piece, and it costs more to get there. **(strongest)**\n\n   This is the strongest defense. It concedes what the runner-up would accomplish, in specific terms, before saying what it leaves behind.\n\n   Notice the last clause. It admits the recommendation costs more rather than hoping the reader misses it. A comparison that makes your option look flawless is a comparison your reader will not believe, because no option is flawless, and they know it.\n\n\n- **Option:** Compact membership would help nurses, help patients, help rural hospitals, improve emergency response, reduce administrative burden, and bring Bliss in line with the majority of states.\n\n   Six reasons, and not one comparison. This is the list-everything defense, and it reads as advocacy rather than analysis.\n\n   There is also a quieter problem. Several of these would be equally true of the smaller options, so they do not distinguish your recommendation from anything else on the list. A reason that supports every option is not a reason for this one.\n\n\n\n### 3. [write] Review your sentence and save your final version.\n\n*Shows back to student:* Your original sentence, for reference\n*Helper text:*\nRevise your sentence using what you learned, or keep it if you believe it already explains what the runner-up would accomplish and what it would leave undone.\n*Placeholder text in box:* Faster endorsement processing would...\n*Button:* Save my final version\n*After they submit:*\nYour final version is saved.\n\n> **Carry this into your own brief**\n\n> Name the runner-up, say what it would accomplish, then say what it leaves undone and what your recommendation costs to reach further. A defense that concedes nothing persuades no one, and a reader who sees you being fair to the option you rejected will trust you about the one you chose.\n\n---\n\n## Step six: make the ask\n\n*Why this step matters:*\nEverything up to here has been analysis. This is the part where you ask for something. Briefs fail at this step more often than at any other, and they fail in a particular way: they end by hoping. The writer has made the case, feels the conclusion is obvious, and finishes with something like I hope you will consider this important issue. The reader agrees, does nothing, and nothing is what the brief asked for.\n\n### 1. [choice] Your brief goes to the senator who chairs the health and welfare committee. How should it end?\n\n*Helper text:*\nRemember where this issue stands. No compact legislation has been introduced in Bliss.\n\n- **Option:** I hope you will support the Nurse Licensure Compact.\n\n   Support is a feeling, not an action. Your reader can support your position completely, all the way through the session, and nothing happens.\n\n   This is the most common ending in student briefs, and it is comfortable for a reason. Asking for support avoids the risk of asking for something specific and being turned down. It also guarantees nothing will change.\n\n\n- **Option:** I am asking you to schedule a hearing on the compact bill.\n\n   This is a specific action aimed at the right person, and a committee chair is exactly who schedules hearings. It is still the wrong ask, and it is the most instructive wrong answer on this screen.\n\n   There is no compact bill in Bliss. You have asked your reader to do something to a thing that does not exist, which tells them you did not check. It also costs you the part of your brief they might have acted on.\n\n   Go back to the closing card in step two. Asking a legislator to introduce a bill, asking for a vote on a bill already filed, and asking an agency to fund a law already passed are three different requests. Find out which one your issue needs before you write the last paragraph.\n\n\n- **Option:** I am asking you to introduce compact legislation in the session that begins in January. I would be glad to provide the board's endorsement data to your staff, and I can be reached at the address above. **(strongest)**\n\n   This is the strongest ask. Look at what it does.\n\n   It names one action, introducing legislation, which is the action this issue actually needs given that no bill exists. It names when, which turns a good intention into something with a deadline attached. And it offers something your reader needs, because a legislator who introduces a bill has to defend it, and your evidence is what they will defend it with.\n\n   That last part matters more than people expect. An ask that only takes is easy to set aside. An ask that brings something makes you useful rather than demanding.\n\n\n- **Option:** Bliss should join the growing number of states that have adopted the compact.\n\n   Read it again and find the verb aimed at your reader. There is not one.\n\n   This asks the state to do something, and states do not read briefs. People do. Your reader is one person with one set of powers, and an ask addressed to an abstraction gives them nothing to say yes to.\n\n   Watch for this in your own writing. It usually appears when the writer knows what they want to happen but has not decided who is supposed to make it happen.\n\n\n\n> **Carry this into your own brief**\n\n> End with one action, aimed at the person holding the brief, at the stage your issue is actually in, with a date attached and something offered in return. If your last paragraph could be satisfied by your reader nodding, it is not an ask.\n\n---\n\n## Step six, continued: say how you would know it worked\n\n*Why this step matters:*\nThere is one more thing your reader wants, and most briefs do not supply it. If they do what you asked, they are going to be asked later whether it was worth doing. A brief that says how the change could be checked hands them the answer to that question in advance. A brief that does not has asked them to take a risk with nothing to show for it. This is also where you find out whether your recommendation was honest, because a measure that could only ever prove you right is not a measure.\n\n### 1. [write] Write one sentence saying how Bliss would know that joining the compact worked.\n\n*Shows back to student:* Your problem statement, for reference\n*Helper text:*\nGo back to the problem you wrote in step one. Whatever you said was wrong is the thing that should look different afterward.\n*Placeholder text in box:* Bliss would know it worked if...\n*Button:* Save my sentence and continue\n*After they submit:*\nYour sentence is saved.\nNext you will read four versions of the same thing, written by other people. Yours will stay on screen so you can hold it up against them as you read.\n\n### 2. [choice] Which of these is the most useful measure?\n\n*Shows back to student:* Your version, for reference\n*Helper text:*\nThese four were written by other people. Yours is shown above so you can review it alongside them. It is not one of the choices.\n\n- **Option:** Nurses in Bliss will have more flexibility and better access to opportunities.\n\n   Nobody can check this. Flexibility is not counted anywhere, and neither is access to opportunity, so two years from now there is no way to say whether it happened.\n\n   Go back to the problem statement work in step one. The same habit that weakens a problem statement weakens a measure. If the words in it could not appear on a report, they will not settle an argument later.\n\n\n- **Option:** The Bliss Board of Nursing will submit an implementation report to the legislature within 18 months.\n\n   This measures whether the work got done, not whether it worked. A report will arrive on schedule whether the policy helped or not.\n\n   Activity is easy to count, which is exactly why it gets substituted for outcomes. It is worth including as a mechanism, since somebody has to gather the numbers, but do not let it stand in for the result.\n\n\n- **Option:** Two years after implementation, compare the border hospital's vacancy rate and the number of nurses practicing in Bliss on multistate licenses against the board's current endorsement volume and today's three open positions. **(strongest)**\n\n   This is the most useful measure. It names what to look at, what to compare it against, and when.\n\n   The comparison is what makes it work. A number on its own tells you nothing. A number next to the number you started with tells you whether anything changed, and you already have the starting figures, because you gathered them in step one.\n\n   Notice that this measure could come back badly. The vacancy rate might not move. That is what makes it a measure rather than a prediction, and a reader who sees you offer a test you could fail will take the rest of your brief more seriously.\n\n\n- **Option:** More nurses will be able to practice in Bliss.\n\n   This is probably true, and it still does not help.\n\n   More than what, by when, and compared to what would have happened anyway? Nurse counts drift for reasons that have nothing to do with licensure: a new hospital opens, a program graduates a large class, a neighboring state raises wages. Without a baseline and a timeframe, any number that arrives can be read as success by whoever wants to read it that way.\n\n\n\n### 3. [write] Review your sentence and save your final version.\n\n*Shows back to student:* Your original sentence, for reference\n*Helper text:*\nRevise your sentence using what you learned, or keep it if it already includes what to measure, a comparison point, and when to measure it.\n*Placeholder text in box:* Bliss would know it worked if...\n*Button:* Save my final version\n*After they submit:*\nYour final version is saved.\n\n> **Carry this into your own brief**\n\n> Tie your measure to the problem you named at the start, give it a baseline and a date, and make sure it could come back against you. Your reader is deciding whether to spend something on your recommendation. Telling them how they will know it paid off is the last thing that separates a brief from an opinion.\n\n*Closing text on this screen:*\n**One thing worth noticing** The board's funding was an argument against your recommendation in step three and an argument for leaving things alone in step four. The fact never changed. What changed was which side of the question you were standing on, and that is most of what makes policy analysis harder than it looks.\n**A last word** This activity used a bill in a fictional statehouse because legislation is the clearest version of the process. It has visible stages, a written record, and a person whose job is to decide. It is not the most common version.\nMost of the advocacy you do will be closer than that. A protocol on your unit that stopped fitting the work. A staffing pattern your council could take up. A policy your organization wrote years ago and has not looked at since. A position your professional organization could be asked to take. The six steps do not change with the size of the room. Name the problem so someone else can act on it, find who has the authority, understand who is affected and who will object, lay out the real options including leaving things alone, choose one and say why, and ask for something specific.\nHere is why it matters that it is you. Nurses are closest to the place where a policy meets a patient, which means you see the distance between what a policy says and what it does long before anyone who writes policy will. That knowledge does not travel on its own. Somebody has to carry it into the room where the decision gets made, in a form the person making the decision can actually use.\nThat is what a brief is for, and you now know how to build one. The next one is yours.\n\n---\n\n## Summary sheet (final screen)\n\nHeading: Policy brief activity: summary sheet\n**Print this now.** Use your browser's print command and choose Save as PDF. If you close this page and open it somewhere else, this sheet will be empty.\nThe sheet reprints each step title, its one-line subtitle, the student's own writing, the choices they made, and the principle for that step. The step titles, subtitles, and principles are:\n**Step one: state the problem**\n*Subtitle:* Who is affected, by what, and at what scale\n*Principle:* Name who is affected, what is causing it, and how big it is. Keep the solution out of the problem sentence.\n**Step one, continued: back it with evidence**\n*Subtitle:* Different sources do different jobs\n*Principle:* Data from the agency that runs a process is the hardest evidence for a reader to dismiss. Stories help a reader understand the human side and opinion polls show whether a change can move. Neither one establishes that a problem exists.\n**Step two: figure out who has the power to change it**\n*Subtitle:* What controls the problem\n*Principle:* Work out what controls the problem before you decide who to write to. Licensure and scope of practice are state matters, and a brief aimed at the wrong level cannot work however well it is written.\n**Step two, continued: name the person**\n*Subtitle:* Authority is not the same as influence\n*Principle:* Write to the person who controls the step your issue is stuck at. You can write to an ally instead, as long as your ask matches what that ally can deliver.\n**Step three: map who is affected**\n*Subtitle:* Supporters, resisters, and the people nobody asked\n*Principle:* Identify who would support, who would resist, and who is affected but absent. Check your assumptions about the first two, and look hardest at the third.\n**Step three, continued: take the objection seriously**\n*Subtitle:* Concede what is real, then give your reader something to do\n*Principle:* Find out whether an objection is wrong, half right, or sound before you answer it. Concede what is real, add what complicates it, and give your reader something specific to do.\n**Step four: build the option set**\n*Subtitle:* What belongs on the list and what does not\n*Principle:* An option belongs if your reader could actually choose it. Include the status quo every time, include the narrower fixes, and leave off anything that exists only to lose.\n**Step four, continued: weigh the options against the problem**\n*Subtitle:* What each option fixes, and what doing nothing costs\n*Principle:* Compare each option against the problem piece by piece, and name what your own recommendation leaves unfixed. A reader who sees you state your option's limits will believe you about the others.\n**Step five: commit**\n*Subtitle:* What you would recommend, and what defending it requires\n*Principle:* A brief has to recommend something. Choose the one you can defend honestly, knowing what it costs and what it leaves undone.\n**Step five, continued: defend it**\n*Subtitle:* Name the runner-up before your reader does\n*Principle:* Name the runner-up, say what it would accomplish, then say what it leaves undone and what your recommendation costs to reach further. A defense that concedes nothing persuades no one.\n**Step six: make the ask**\n*Subtitle:* One action, aimed at your reader, at the right stage\n*Principle:* End with one action, aimed at the person holding the brief, at the stage your issue is actually in, with a date attached and something offered in return.\n**Step six, continued: say how you would know it worked**\n*Subtitle:* A baseline, a date, and a result that could go against you\n*Principle:* Tie your measure to the problem you named at the start, give it a baseline and a date, and make sure it could come back against you.\n**A last word**\nThis activity used a bill in a fictional statehouse because legislation is the clearest version of the process. It has visible stages, a written record, and a person whose job is to decide. It is not the most common version.\nMost of the advocacy you do will be closer than that. A protocol on your unit that stopped fitting the work. A staffing pattern your council could take up. A policy your organization wrote years ago and has not looked at since. A position your professional organization could be asked to take. The six steps do not change with the size of the room. Name the problem so someone else can act on it, find who has the authority, understand who is affected and who will object, lay out the real options including leaving things alone, choose one and say why, and ask for something specific.\nHere is why it matters that it is you. Nurses are closest to the place where a policy meets a patient, which means you see the distance between what a policy says and what it does long before anyone who writes policy will. That knowledge does not travel on its own. Somebody has to carry it into the room where the decision gets made, in a form the person making the decision can actually use.\nThat is what a brief is for, and you now know how to build one. The next one is yours.\n";
+    const STORAGE_KEY = 'policyBriefActivity.v1';
+    const DB_NAME = 'policyBriefActivity';
+    const DB_STORE = 'savedWork';
+    const STEP_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
+    const CATEGORIES = ['Would likely support', 'Would likely resist', 'Affected, but not in the room'];
+
+    const safeParse = value => { try { return JSON.parse(value); } catch { return null; } };
+    const loadSavedState = () => { try { return safeParse(localStorage.getItem(STORAGE_KEY)); } catch { return null; } };
+    const state = Object.assign({ screen: 0, studentName: '', answers: {}, completed: {}, completedAt: 0, savedAt: 0 }, loadSavedState() || {});
+    const app = document.getElementById('app');
+    const saveStatus = document.getElementById('save-status');
+    const progressFill = document.getElementById('progress-fill');
+    const restartDialog = document.getElementById('restart-dialog');
+
+    function openStateDatabase() {
+      return new Promise((resolve, reject) => {
+        if (!('indexedDB' in window)) return reject(new Error('IndexedDB is unavailable.'));
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = () => {
+          if (!request.result.objectStoreNames.contains(DB_STORE)) request.result.createObjectStore(DB_STORE);
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function readIndexedState() {
+      const database = await openStateDatabase();
+      return new Promise((resolve, reject) => {
+        const request = database.transaction(DB_STORE, 'readonly').objectStore(DB_STORE).get(STORAGE_KEY);
+        request.onsuccess = () => { database.close(); resolve(request.result || null); };
+        request.onerror = () => { database.close(); reject(request.error); };
+      });
+    }
+
+    async function writeIndexedState(snapshot) {
+      const database = await openStateDatabase();
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction(DB_STORE, 'readwrite');
+        transaction.objectStore(DB_STORE).put(snapshot, STORAGE_KEY);
+        transaction.oncomplete = () => { database.close(); resolve(); };
+        transaction.onerror = () => { database.close(); reject(transaction.error); };
+      });
+    }
+
+    async function clearIndexedState() {
+      const database = await openStateDatabase();
+      return new Promise((resolve, reject) => {
+        const transaction = database.transaction(DB_STORE, 'readwrite');
+        transaction.objectStore(DB_STORE).delete(STORAGE_KEY);
+        transaction.oncomplete = () => { database.close(); resolve(); };
+        transaction.onerror = () => { database.close(); reject(transaction.error); };
+      });
+    }
+
+    function savedStatus() {
+      if (!state.savedAt) return 'Progress will save on this device';
+      const time = new Date(state.savedAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      return `Saved on this device at ${time}`;
+    }
+
+    function persist(message = 'Saving…') {
+      state.savedAt = Date.now();
+      const snapshot = JSON.parse(JSON.stringify(state));
+      let localSaved = false;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+        localSaved = true;
+        saveStatus.textContent = message;
+      } catch {
+        saveStatus.textContent = 'Trying another save method…';
+      }
+      window.clearTimeout(persist.indexedTimer);
+      persist.indexedTimer = window.setTimeout(async () => {
+        try {
+          await writeIndexedState(snapshot);
+          saveStatus.textContent = savedStatus();
+        } catch {
+          saveStatus.textContent = localSaved ? savedStatus() : 'Keep this page open—saving is unavailable';
+        }
+      }, 100);
+    }
+
+    function escapeHtml(value = '') {
+      return String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char]));
+    }
+
+    function inlineMd(value = '') {
+      let text = escapeHtml(value.trim());
+      text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      text = text.replace('Policy Briefs, UNC Writing Center.', '<a href="https://writingcenter.unc.edu/tips-and-tools/policy-briefs/" target="_blank" rel="noopener">Policy Briefs, UNC Writing Center<span class="print-hide"> ↗</span></a>.');
+      text = text.replace(/nursecompact\.com/g, '<a href="https://www.nursecompact.com/" target="_blank" rel="noopener">nursecompact.com<span class="print-hide"> ↗</span></a>');
+      return text;
+    }
+
+    function splitSections(source) {
+      const output = [];
+      let current = null;
+      for (const raw of source.replace(/\r/g, '').split('\n')) {
+        const match = raw.match(/^##\s+(.+)$/);
+        if (match) {
+          if (current) output.push(current);
+          current = { title: match[1].trim(), lines: [] };
+        } else if (current) current.lines.push(raw);
+      }
+      if (current) output.push(current);
+      return output;
+    }
+
+    function slugify(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function parseQuestions(section) {
+      const questions = [];
+      let current = null;
+      const preface = [];
+      for (const line of section.lines) {
+        const match = line.match(/^###\s+(\d+)\.\s+\[(\w+)\]\s+(.+)$/);
+        if (match) {
+          if (current) questions.push(current);
+          current = { number: match[1], type: match[2], title: match[3].trim(), lines: [] };
+        } else if (current) current.lines.push(line);
+        else preface.push(line);
+      }
+      if (current) questions.push(current);
+      return { preface, questions };
+    }
+
+    const sections = splitSections(ACTIVITY_SOURCE);
+    const scenario = sections.find(section => section.title.startsWith('The scenario'));
+    const screens = sections.filter(section => /^Step (one|two|three|four|five|six)/i.test(section.title)).map(section => ({
+      ...section,
+      slug: slugify(section.title),
+      parsed: parseQuestions(section),
+      step: STEP_WORDS[(section.title.match(/^Step (one|two|three|four|five|six)/i) || [])[1]?.toLowerCase()] || 1
+    }));
+    const totalQuestionCount = screens.reduce((total, screen) => total + screen.parsed.questions.length, 0);
+
+    function stateTable() {
+      return `<table class="status-table"><caption>Jurisdictions outside the Nurse Licensure Compact, grouped by status</caption><tbody>
+        <tr><th>No legislation introduced</th><td>Alaska, American Samoa, California, Hawaii, Illinois, Minnesota, Nevada, New York, Northern Mariana Islands, Oregon</td></tr>
+        <tr><th>Legislation pending</th><td>District of Columbia, Michigan</td></tr>
+        <tr><th>Passed, waiting to take effect</th><td>Massachusetts, Virgin Islands</td></tr>
+        <tr><th>Passed, partly in effect</th><td>Guam</td></tr>
+      </tbody></table>`;
+    }
+
+    function policyStatusBlock() {
+      return `<p><strong>Passing a law and putting it in place are not the same thing.</strong> Bliss is fictional, but the Nurse Licensure Compact is real, and the states outside it are not all in the same position. Where a state sits in this sequence changes what there is to ask for.</p>
+        ${stateTable()}
+        <p>Asking a legislator to introduce a bill is a different request from asking for a vote on a bill that already exists, and both are different from asking an agency to fund a law that already passed. Match your ask to where the issue actually is.</p>
+        <p>As you move through your own policy brief, pay attention to where your issue sits in the policy process and make sure your recommendation matches that stage.</p>
+        <p><em>Status as of September 2026. Check current membership at <a href="https://www.nursecompact.com/" target="_blank" rel="noopener">nursecompact.com<span class="print-hide"> ↗</span></a> before using this anywhere else.</em></p>`;
+    }
+
+    function mdBlocks(lines, className = '') {
+      const chunks = [];
+      let paragraph = [];
+      let list = [];
+      let quote = [];
+      const flushParagraph = () => {
+        if (!paragraph.length) return;
+        const joined = paragraph.join(' ').trim();
+        if (joined.includes('Jurisdictions outside the Nurse Licensure Compact')) {
+          chunks.push(policyStatusBlock());
+        } else if (joined) chunks.push(`<p>${inlineMd(joined)}</p>`);
+        paragraph = [];
+      };
+      const flushList = () => {
+        if (!list.length) return;
+        chunks.push(`<ul>${list.map(item => `<li>${inlineMd(item)}</li>`).join('')}</ul>`);
+        list = [];
+      };
+      const flushQuote = () => {
+        if (!quote.length) return;
+        const useful = quote.filter(item => item.trim());
+        const hasTakeaway = useful[0]?.includes('Carry this into your own brief');
+        if (hasTakeaway) useful.shift();
+        chunks.push(`<div class="transfer">${hasTakeaway ? '<h4>Important takeaway</h4>' : ''}${useful.map(item => `<p>${inlineMd(item)}</p>`).join('')}</div>`);
+        quote = [];
+      };
+      for (const raw of lines) {
+        const line = raw.trim();
+        if (!line) { flushParagraph(); flushList(); continue; }
+        if (!line.startsWith('>')) flushQuote();
+        if (line === '---') continue;
+        if (/^\*Closing text on this screen:\*$/.test(line)) { flushParagraph(); flushList(); flushQuote(); chunks.push('<div class="closing-note">'); continue; }
+        if (line.startsWith('>')) { flushParagraph(); flushList(); quote.push(line.replace(/^>\s?/, '')); continue; }
+        if (/^-\s+/.test(line) && !/^- \*\*/.test(line)) { flushParagraph(); flushQuote(); list.push(line.replace(/^-\s+/, '')); continue; }
+        if (/^\*Why this step matters:\*$/.test(line)) continue;
+        paragraph.push(line);
+      }
+      flushParagraph(); flushList(); flushQuote();
+      if (chunks.includes('<div class="closing-note">')) chunks.push('</div>');
+      return `<div${className ? ` class="${className}"` : ''}>${chunks.join('')}</div>`;
+    }
+
+    function directive(lines, label) {
+      const marker = `*${label}:*`;
+      const index = lines.findIndex(line => line.trim().startsWith(marker));
+      if (index < 0) return '';
+      const sameLine = lines[index].trim().slice(marker.length).trim();
+      if (sameLine) return sameLine;
+      const out = [];
+      for (let i = index + 1; i < lines.length; i++) {
+        const value = lines[i].trim();
+        if (!value) continue;
+        if (/^\*[^*]+:\*/.test(value) || /^- \*\*/.test(value) || /^>/.test(value)) break;
+        out.push(value);
+      }
+      return out.join(' ');
+    }
+
+    function parseItems(lines, type) {
+      const patterns = {
+        choice: /^- \*\*Option:\*\*\s*(.*)$/,
+        sort: /^- \*\*Group \(correct bin: ([^)]+)\):\*\*\s*(.*)$/,
+        multi: /^- \*\*Item \((belongs on the list|does not belong)\):\*\*\s*(.*)$/
+      };
+      const pattern = patterns[type];
+      const items = [];
+      let current = null;
+      for (const raw of lines) {
+        const line = raw.trim();
+        const match = line.match(pattern);
+        if (match) {
+          if (current) items.push(current);
+          if (type === 'choice') {
+            const strongest = /\*\*\(strongest\)\*\*/.test(match[1]);
+            current = { label: match[1].replace(/\s*\*\*\(strongest\)\*\*\s*/, '').trim(), strongest, feedback: [] };
+          } else if (type === 'sort') current = { correct: match[1], label: match[2], feedback: [] };
+          else current = { belongs: match[1] === 'belongs on the list', label: match[2], feedback: [] };
+          continue;
+        }
+        if (!current) continue;
+        if (/^>/.test(line) || /^\*Optional (rewrite )?box:\*/.test(line) || /^\*Closing text/.test(line)) {
+          items.push(current);
+          current = null;
+          continue;
+        }
+        if (line && !/^\*(Helper text|Button|After they submit|Checkboxes|Categories|Shows back to student|Recalls):\*/.test(line)) current.feedback.push(line);
+      }
+      if (current) items.push(current);
+      return items;
+    }
+
+    function tailLines(lines) {
+      const start = lines.findIndex(line => /^>/.test(line.trim()) || /^\*Closing text on this screen:\*/.test(line.trim()));
+      return start < 0 ? [] : lines.slice(start).filter(line => !/^\*Optional (rewrite )?box:\*/.test(line.trim()) && !line.includes('**One thing worth noticing**'));
+    }
+
+    function whyText(lines) {
+      const index = lines.findIndex(line => line.trim() === '*Why this step matters:*');
+      if (index < 0) return '';
+      const out = [];
+      for (let i = index + 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (!line) { if (out.length) break; else continue; }
+        if (line.startsWith('###')) break;
+        out.push(line);
+      }
+      return out.join(' ');
+    }
+
+    function qid(screen, index) { return `${screen.slug}-q${index + 1}`; }
+    function answer(id) { return state.answers[id] || {}; }
+    function isDone(id) { return Boolean(state.completed[id]); }
+    const FINAL_VERSION_SOURCES = {
+      'step-three-continued-take-the-objection-seriously-q4': 'step-three-continued-take-the-objection-seriously-q2',
+      'step-four-continued-weigh-the-options-against-the-problem-q4': 'step-four-continued-weigh-the-options-against-the-problem-q2',
+      'step-five-continued-defend-it-q3': 'step-five-continued-defend-it-q1',
+      'step-six-continued-say-how-you-would-know-it-worked-q3': 'step-six-continued-say-how-you-would-know-it-worked-q1'
+    };
+
+    function referenceFor(screen, index, lines) {
+      let marker = directive(lines, 'Shows back to student');
+      let sourceId = '';
+      let text = '';
+      if (screen.slug === 'step-one-state-the-problem' && (index === 1 || index === 2)) {
+        marker = index === 1 ? 'Your original problem statement, for reference' : 'Your original problem statement';
+        sourceId = 'step-one-state-the-problem-q1';
+      }
+      if (!marker) return '';
+      if (screen.slug === 'step-five-commit' && index === 1) {
+        sourceId = 'step-five-commit-q1';
+        const selected = answer(sourceId).selected;
+        const choices = parseItems(screen.parsed.questions[0].lines, 'choice');
+        text = Number.isInteger(selected) ? choices[selected]?.label : '';
+      }
+      if (!sourceId) {
+        if (screen.slug === 'step-one-state-the-problem' && /problem statement/i.test(marker)) sourceId = 'step-one-state-the-problem-q1';
+        else if (/problem statement/i.test(marker)) sourceId = 'step-one-state-the-problem-q4';
+        else if (screen.slug.startsWith('step-three')) sourceId = 'step-three-continued-take-the-objection-seriously-q2';
+        else if (screen.slug.startsWith('step-four')) sourceId = 'step-four-continued-weigh-the-options-against-the-problem-q2';
+        else if (screen.slug.startsWith('step-five')) sourceId = 'step-five-continued-defend-it-q1';
+        else if (screen.slug.startsWith('step-six')) sourceId = 'step-six-continued-say-how-you-would-know-it-worked-q1';
+      }
+      text = text || answer(sourceId).text || 'You have not entered this response yet.';
+      return `<div class="reference-box"><strong>${escapeHtml(marker)}</strong>${escapeHtml(text)}</div>`;
+    }
+
+    function recallFor(lines) {
+      const marker = directive(lines, 'Recalls');
+      if (!marker) return '';
+      const objection = 'The Bliss Board of Nursing is funded by its own licensing fees. If nurses shift to multistate licenses and out-of-state nurses stop applying for Bliss licenses, board revenue drops, and the gap gets closed by raising fees on the nurses who never leave Bliss.';
+      return `<div class="reference-box"><strong>${escapeHtml(marker)}</strong>${escapeHtml(objection)}</div>`;
+    }
+
+    function helperFor(lines) {
+      const text = directive(lines, 'Helper text');
+      return text ? `<p class="helper">${inlineMd(text)}</p>` : '';
+    }
+
+    function runnerUpReference(screen, index) {
+      if (screen.slug !== 'step-five-continued-defend-it' || index !== 0) return '';
+      return `<div class="reference-box runner-up-box"><strong>Runner-up options from Step 5</strong><ul>
+        <li><strong>Require the board to decide endorsement applications within 30 days and cap the fee</strong> — use this runner-up for the shared practice response below.</li>
+        <li>Create a telehealth registration for nurses licensed elsewhere.</li>
+        <li>Leave the current requirements in place.</li>
+      </ul></div>`;
+    }
+
+    function renderChoice(screen, question, index, locked) {
+      const id = qid(screen, index);
+      const items = parseItems(question.lines, 'choice');
+      const selected = answer(id).selected;
+      const hasKey = items.some(item => item.strongest);
+      const options = items.map((item, itemIndex) => {
+        const active = selected === itemIndex;
+        const tag = item.strongest ? '<span class="feedback-tag strongest">Strongest choice</span>' : (hasKey ? '<span class="feedback-tag">Consider this</span>' : '<span class="feedback-tag">Your choice</span>');
+        return `<div class="option-card${active ? ' selected' : ''}">
+          <label class="option-choice"><input type="radio" name="${id}" value="${itemIndex}" data-choice="${id}" ${active ? 'checked' : ''} ${locked ? 'disabled' : ''}><span>${inlineMd(item.label)}</span></label>
+          ${active ? `<div class="option-feedback">${tag}${mdBlocks(item.feedback)}</div>` : ''}
+        </div>`;
+      }).join('');
+      return `${recallFor(question.lines)}${referenceFor(screen, index, question.lines)}${helperFor(question.lines)}<div class="options">${options}</div>`;
+    }
+
+    function renderWrite(screen, question, index, locked) {
+      const id = qid(screen, index);
+      const value = answer(id).text || answer(FINAL_VERSION_SOURCES[id]).text || '';
+      const placeholder = directive(question.lines, 'Placeholder text in box') || '';
+      const label = directive(question.lines, 'Button') || 'Save my response and continue';
+      const after = directive(question.lines, 'After they submit');
+      return `${referenceFor(screen, index, question.lines)}${runnerUpReference(screen, index)}${helperFor(question.lines)}
+        <textarea aria-label="${escapeHtml(question.title)}" data-text="${id}" placeholder="${escapeHtml(placeholder)}" ${locked ? 'disabled' : ''}>${escapeHtml(value)}</textarea>
+        <div class="actions"><button class="button" data-save-write="${id}" ${locked || !value.trim() ? 'disabled' : ''}>${escapeHtml(label)}</button></div>
+        ${isDone(id) ? `<div class="saved-box"><strong>Your response is saved.</strong>${after ? `<br>${inlineMd(after.replace(/^Your [^.]+\.\s*/, ''))}` : ''}</div>` : ''}`;
+    }
+
+    function renderSelfcheck(screen, question, index, locked) {
+      const id = qid(screen, index);
+      const start = question.lines.findIndex(line => line.trim() === '*Checkboxes:*');
+      const checks = [];
+      if (start >= 0) {
+        for (let i = start + 1; i < question.lines.length; i++) {
+          const match = question.lines[i].trim().match(/^-\s+(.+)/);
+          if (match) checks.push(match[1]);
+          else if (checks.length && question.lines[i].trim()) break;
+        }
+      }
+      const chosen = answer(id).checks || [];
+      const rows = checks.map((label, itemIndex) => `<label class="check-row"><input type="checkbox" data-check="${id}" value="${itemIndex}" ${chosen.includes(itemIndex) ? 'checked' : ''} ${locked ? 'disabled' : ''}><span>${inlineMd(label)}</span></label>`).join('');
+      const count = chosen.length;
+      const outcomeLabel = count === 0 ? 'If they check 0' : count === 1 ? 'If they check 1' : count === 2 ? 'If they check 2' : 'If they check 3';
+      const outcome = directive(question.lines, outcomeLabel);
+      const thenText = directive(question.lines, 'Then');
+      return `${referenceFor(screen, index, question.lines)}${helperFor(question.lines)}<div class="check-list">${rows}</div><button class="button" data-check-button="${id}" ${locked ? 'disabled' : ''}>${escapeHtml(directive(question.lines, 'Button') || 'Check my response')}</button>
+        ${isDone(id) ? `<div class="result-box">${inlineMd(outcome)}${thenText ? `<p>${inlineMd(thenText)}</p>` : ''}</div>` : ''}`;
+    }
+
+    function renderMulti(screen, question, index, locked) {
+      const id = qid(screen, index);
+      const items = parseItems(question.lines, 'multi');
+      const chosen = answer(id).selectedItems || [];
+      const rows = items.map((item, itemIndex) => {
+        const checked = chosen.includes(itemIndex);
+        const correct = checked === item.belongs;
+        return `<div class="option-card${checked ? ' selected' : ''}"><label class="option-choice"><input type="checkbox" data-multi="${id}" value="${itemIndex}" ${checked ? 'checked' : ''} ${locked ? 'disabled' : ''}><span>${inlineMd(item.label)}</span></label>
+          ${isDone(id) ? `<div class="option-feedback"><span class="feedback-tag ${correct ? 'match' : 'review'}">${correct ? 'Matches the option list' : 'Review this one'}</span>${mdBlocks(item.feedback)}</div>` : ''}</div>`;
+      }).join('');
+      return `${helperFor(question.lines)}<div class="options">${rows}</div><div class="actions"><button class="button" data-multi-button="${id}" ${locked ? 'disabled' : ''}>${escapeHtml(directive(question.lines, 'Button') || 'Check my list')}</button></div>`;
+    }
+
+    function renderSort(screen, question, index, locked) {
+      const id = qid(screen, index);
+      const items = parseItems(question.lines, 'sort');
+      const assignments = answer(id).assignments || {};
+      const cards = items.map((item, itemIndex) => {
+        const selected = assignments[itemIndex] || '';
+        const correct = selected === item.correct;
+        return `<div class="sort-card"><label for="${id}-${itemIndex}">${inlineMd(item.label)}</label><select id="${id}-${itemIndex}" data-sort="${id}" data-item="${itemIndex}" ${locked ? 'disabled' : ''}>
+          <option value="">Choose a category</option>${CATEGORIES.map(category => `<option value="${escapeHtml(category)}" ${selected === category ? 'selected' : ''}>${escapeHtml(category)}</option>`).join('')}
+        </select>${isDone(id) ? `<div class="option-feedback"><span class="feedback-tag ${correct ? 'match' : 'review'}">${correct ? 'Matches' : `Best fit: ${escapeHtml(item.correct)}`}</span>${mdBlocks(item.feedback)}</div>` : ''}</div>`;
+      }).join('');
+      const allAssigned = items.length && items.every((_, i) => assignments[i]);
+      return `${helperFor(question.lines)}<div class="sort-list">${cards}</div><div class="actions"><button class="button" data-sort-button="${id}" ${locked || !allAssigned ? 'disabled' : ''}>${escapeHtml(directive(question.lines, 'Button') || 'Check my choices')}</button></div>`;
+    }
+
+    function renderQuestion(screen, question, index, locked) {
+      const id = qid(screen, index);
+      let controls = '';
+      if (question.type === 'choice') controls = renderChoice(screen, question, index, locked);
+      if (question.type === 'write') controls = renderWrite(screen, question, index, locked);
+      if (question.type === 'selfcheck') controls = renderSelfcheck(screen, question, index, locked);
+      if (question.type === 'multi') controls = renderMulti(screen, question, index, locked);
+      if (question.type === 'sort') controls = renderSort(screen, question, index, locked);
+      return `<section class="question${locked ? ' locked' : ''}" id="${id}"><p class="question-number">Question ${question.number}</p><h3>${inlineMd(question.title)}</h3>${locked ? '<p class="locked-note">Complete the question above to continue.</p>' : controls}${isDone(id) ? mdBlocks(tailLines(question.lines)) : ''}</section>`;
+    }
+
+    function cleanPreface(lines) {
+      const start = lines.findIndex(line => line.trim() === '*Why this step matters:*');
+      if (start < 0) return lines;
+      let end = start + 1;
+      while (end < lines.length && (lines[end].trim() || end === start + 1)) end++;
+      return lines.slice(end);
+    }
+
+    function renderScenario() {
+      const about = [];
+      const situation = [];
+      let target = about;
+      for (const raw of scenario?.lines || []) {
+        const line = raw.trim();
+        if (!line || line === '**About the State of Bliss**') continue;
+        if (line.startsWith('**About the State of Bliss**')) {
+          target = about;
+          const remainder = line.replace('**About the State of Bliss**', '').trim();
+          if (remainder) target.push(remainder);
+          continue;
+        }
+        if (line.startsWith('**The situation in Bliss**')) {
+          target = situation;
+          const remainder = line.replace('**The situation in Bliss**', '').trim();
+          if (remainder) target.push(remainder);
+          continue;
+        }
+        target.push(raw);
+      }
+      return `<details class="scenario-card" open><summary>Review the Scenario</summary><div class="scenario-body"><h3>About the State of Bliss</h3>${mdBlocks(about)}<h3>The Situation in Bliss</h3>${mdBlocks(situation)}</div></details>`;
+    }
+
+    function openingScreen() {
+      progressFill.style.width = '0%';
+      app.innerHTML = `<section class="screen page-card">
+        <div class="page-banner"><p class="eyebrow">Interactive practice activity</p><h1>Build a policy brief, one decision at a time</h1><p class="lede">Practice the six steps with a fictional policy issue, then apply the same thinking to your own brief.</p></div>
+        <div class="opening-body">
+          <section class="name-card"><label for="student-name">Student name <span>Required</span></label><input id="student-name" type="text" autocomplete="name" value="${escapeHtml(state.studentName || '')}" placeholder="First and last name" required><p>Your name will appear on the summary sheet you submit for grading.</p></section>
+          <div class="at-glance" aria-label="Activity at a glance">
+            <div class="glance-item"><strong>What</strong>Complete an interactive practice activity using the State of Bliss scenario.</div>
+            <div class="glance-item"><strong>When</strong>Complete it before you develop your policy brief. Due dates are in Canvas.</div>
+            <div class="glance-item"><strong>What you submit</strong>Save the final summary as a PDF and attach it as an appendix to your policy brief.</div>
+          </div>
+
+          <div class="notice"><h3>Before you start</h3><p>Your name, responses, and current place in the activity save automatically on this device. To return later, use this same browser and the same activity link.</p><p>Browser settings can still remove saved work if you use a private or incognito window or clear your browsing data. Complete the activity in one sitting if you can.</p><p><strong>When you reach the end, print or save your summary sheet as a PDF right away.</strong></p></div>
+
+          <section class="content-section"><h3>What you will do</h3><p>You will work through six steps involved in developing a policy brief. Throughout the activity, you will use one example so you can focus on the process.</p><p>Sometimes you will write a short response. Other times you will choose between several options, place information into categories, or compare different approaches. After each choice, you will see an explanation of why an option is stronger or weaker.</p><p>The example focuses on the Nurse Licensure Compact. The policy issue is real, but the activity takes place in a fictional state called Bliss. You will learn more about Bliss in Step One.</p><p>This is a <strong>practice activity</strong>. After completing it, you will use the same six steps to develop a policy brief on the topic you have already selected.</p></section>
+
+          <section class="content-section"><h3>Where you complete and submit your work</h3><p>Complete the activity here. Nothing is sent or submitted from this webpage. At the end, your responses will be collected automatically into a summary sheet.</p><p><strong>What you will submit:</strong> Save your completed summary sheet as a PDF. Submit that PDF as an appendix with your policy brief in Canvas.</p><p>This activity is graded for <strong>completion</strong>, not for choosing the strongest answer every time. Answer based on what you think. If you choose an option that turns out not to be the strongest choice, that is part of the learning process.</p></section>
+
+          <section class="content-section"><h3>What a policy brief is</h3><p>A policy brief is a concise document written for a specific person who has the authority or influence to act on an issue. Nurses may use a policy brief to make a case to a legislator, board member, organizational leader, or another decision-maker.</p><p>A policy brief:</p><ul><li>identifies the problem and who it affects</li><li>presents realistic options, including leaving things as they are</li><li>recommends one option and explains why</li><li>asks the reader to take a specific action</li></ul><p>The <a href="https://writingcenter.unc.edu/tips-and-tools/policy-briefs/" target="_blank" rel="noopener">UNC Chapel Hill Writing Center policy brief guide<span class="print-hide"> ↗</span></a> is worth reading before you draft your own brief. The specific length, format, and grading requirements for <strong>your policy brief</strong> are in Canvas.</p></section>
+
+          <section class="content-section"><h3>Why this matters</h3><p>You may never testify at a statehouse or send a policy brief to an elected official. However, nurses advocate for change in many settings. You may ask a manager to change a protocol, bring a staffing concern to a unit council, propose a change through shared governance, or ask a professional organization to take a position.</p><p>The setting may change, but the same skills apply: identify who can make the change, state the problem clearly, take opposing concerns seriously, and ask for a specific action.</p></section>
+
+          <section class="content-section"><h3>The six steps</h3><ol class="six-steps"><li>State the problem.</li><li>Figure out who has the power to change it.</li><li>Map who is affected and who may object.</li><li>Lay out the realistic options, including doing nothing.</li><li>Choose one option and defend your choice.</li><li>Make a specific ask and explain how you would know whether it worked.</li></ol><p><strong>Read the explanation after every choice, even when you select the strongest answer.</strong> The explanations are where much of the learning happens.</p></section>
+
+          <div class="actions"><button class="button orange" id="begin" ${state.studentName?.trim() ? '' : 'disabled'}>Begin Step 1</button></div>
+        </div>
+      </section>`;
+      const nameInput = document.getElementById('student-name');
+      nameInput.addEventListener('input', event => {
+        state.studentName = event.target.value;
+        document.getElementById('begin').disabled = !state.studentName.trim();
+        persist();
+      });
+      document.getElementById('begin').addEventListener('click', () => go(1));
+    }
+
+    function stepScreen(index) {
+      const screen = screens[index - 1];
+      const questions = screen.parsed.questions;
+      progressFill.style.width = `${(screen.step / 6) * 100}%`;
+      let priorDone = true;
+      const questionHtml = questions.map((question, qIndex) => {
+        const locked = !priorDone;
+        const html = renderQuestion(screen, question, qIndex, locked);
+        priorDone = priorDone && isDone(qid(screen, qIndex));
+        return html;
+      }).join('');
+      const allDone = questions.every((_, qIndex) => isDone(qid(screen, qIndex)));
+      const why = whyText(screen.parsed.preface);
+      const nextLabel = index === screens.length ? 'View my summary sheet' : `Continue to ${screens[index].title.replace(/^Step /, 'Step ')}`;
+      app.innerHTML = `<section class="screen">
+        <div class="workspace">
+          <article class="lesson-card"><div class="lesson-head"><p class="eyebrow" style="color:var(--orange)">Step ${screen.step} of 6${/continued/i.test(screen.title) ? ' · Part 2' : ''}</p><h2>${inlineMd(screen.title.replace(/^Step [^:]+:\s*/i, ''))}</h2>${why ? `<div class="why"><strong>Why this step matters</strong>${inlineMd(why)}</div>` : ''}</div>
+          <div class="lesson-body">${mdBlocks(cleanPreface(screen.parsed.preface))}${questionHtml}</div></article>
+          ${renderScenario()}
+        </div>
+        <nav class="screen-nav" aria-label="Activity navigation"><button class="button secondary" data-back>Back</button><button class="button orange" data-next ${allDone ? '' : 'disabled'}>${escapeHtml(nextLabel)}</button></nav>
+        ${allDone ? '' : '<p class="completion-hint">Complete each question on this screen to continue.</p>'}
+      </section>`;
+      bindStepEvents(screen, questions, index);
+    }
+
+    function bindStepEvents(screen, questions, screenIndex) {
+      document.querySelector('[data-back]').addEventListener('click', () => go(screenIndex - 1));
+      const next = document.querySelector('[data-next]');
+      if (!next.disabled) next.addEventListener('click', () => go(screenIndex + 1));
+
+      document.querySelectorAll('[data-text]').forEach(area => area.addEventListener('input', event => {
+        const id = event.target.dataset.text;
+        state.answers[id] = { ...answer(id), text: event.target.value };
+        persist('Saving…');
+        const button = document.querySelector(`[data-save-write="${id}"]`);
+        if (button) button.disabled = !event.target.value.trim();
+      }));
+      document.querySelectorAll('[data-save-write]').forEach(button => button.addEventListener('click', event => {
+        const id = event.currentTarget.dataset.saveWrite;
+        const area = document.querySelector(`[data-text="${id}"]`);
+        const value = area?.value || answer(id).text || '';
+        if (!value.trim()) return;
+        state.answers[id] = { ...answer(id), text: value };
+        state.completed[id] = true; persist(); renderAt(id);
+      }));
+      document.querySelectorAll('[data-choice]').forEach(input => input.addEventListener('change', event => {
+        const id = event.target.dataset.choice;
+        state.answers[id] = { ...answer(id), selected: Number(event.target.value) };
+        state.completed[id] = true; persist(); renderAt(id);
+      }));
+      document.querySelectorAll('[data-check]').forEach(input => input.addEventListener('change', event => {
+        const id = event.target.dataset.check;
+        const set = new Set(answer(id).checks || []);
+        event.target.checked ? set.add(Number(event.target.value)) : set.delete(Number(event.target.value));
+        state.answers[id] = { ...answer(id), checks: [...set].sort() }; persist('Saving…');
+      }));
+      document.querySelectorAll('[data-check-button]').forEach(button => button.addEventListener('click', event => {
+        const id = event.currentTarget.dataset.checkButton; state.completed[id] = true; persist(); renderAt(id);
+      }));
+      document.querySelectorAll('[data-multi]').forEach(input => input.addEventListener('change', event => {
+        const id = event.target.dataset.multi;
+        const set = new Set(answer(id).selectedItems || []);
+        event.target.checked ? set.add(Number(event.target.value)) : set.delete(Number(event.target.value));
+        state.answers[id] = { ...answer(id), selectedItems: [...set].sort() }; persist('Saving…');
+      }));
+      document.querySelectorAll('[data-multi-button]').forEach(button => button.addEventListener('click', event => {
+        const id = event.currentTarget.dataset.multiButton; state.completed[id] = true; persist(); renderAt(id);
+      }));
+      document.querySelectorAll('[data-sort]').forEach(select => select.addEventListener('change', event => {
+        const id = event.target.dataset.sort;
+        const assignments = { ...(answer(id).assignments || {}), [event.target.dataset.item]: event.target.value };
+        state.answers[id] = { ...answer(id), assignments }; persist('Saving…'); renderAt(id, false);
+      }));
+      document.querySelectorAll('[data-sort-button]').forEach(button => button.addEventListener('click', event => {
+        const id = event.currentTarget.dataset.sortButton; state.completed[id] = true; persist(); renderAt(id);
+      }));
+      function renderAt(id, shouldFocus = true) {
+        stepScreen(screenIndex);
+        if (shouldFocus) requestAnimationFrame(() => document.getElementById(id)?.scrollIntoView({ block: 'start' }));
+      }
+    }
+
+    const summaryItems = [
+      { title:'Step one: state the problem', subtitle:'Who is affected, by what, and at what scale', principle:'Name who is affected, what is causing it, and how big it is. Keep the solution out of the problem sentence.', ids:['step-one-state-the-problem-q1','step-one-state-the-problem-q2','step-one-state-the-problem-q3','step-one-state-the-problem-q4'] },
+      { title:'Step one, continued: back it with evidence', subtitle:'Different sources do different jobs', principle:'Data from the agency that runs a process is the hardest evidence for a reader to dismiss. Stories help a reader understand the human side and opinion polls show whether a change can move. Neither one establishes that a problem exists.', ids:['step-one-continued-back-it-with-evidence-q1'] },
+      { title:'Step two: figure out who has the power to change it', subtitle:'What controls the problem', principle:'Work out what controls the problem before you decide who to write to. Licensure and scope of practice are state matters, and a brief aimed at the wrong level cannot work however well it is written.', ids:['step-two-figure-out-who-has-the-power-to-change-it-q1'] },
+      { title:'Step two, continued: name the person', subtitle:'Authority is not the same as influence', principle:'Write to the person who controls the step your issue is stuck at. You can write to an ally instead, as long as your ask matches what that ally can deliver.', ids:['step-two-figure-out-who-has-the-power-to-change-it-q2'] },
+      { title:'Step three: map who is affected', subtitle:'Supporters, resisters, and the people nobody asked', principle:'Identify who would support, who would resist, and who is affected but absent. Check your assumptions about the first two, and look hardest at the third.', ids:['step-three-map-who-is-affected-q1'] },
+      { title:'Step three, continued: take the objection seriously', subtitle:'Concede what is real, then give your reader something to do', principle:'Find out whether an objection is wrong, half right, or sound before you answer it. Concede what is real, add what complicates it, and give your reader something specific to do.', ids:['step-three-continued-take-the-objection-seriously-q1','step-three-continued-take-the-objection-seriously-q2','step-three-continued-take-the-objection-seriously-q3','step-three-continued-take-the-objection-seriously-q4'] },
+      { title:'Step four: build the option set', subtitle:'What belongs on the list and what does not', principle:'An option belongs if your reader could actually choose it. Include the status quo every time, include the narrower fixes, and leave off anything that exists only to lose.', ids:['step-four-build-the-option-set-q1'] },
+      { title:'Step four, continued: weigh the options against the problem', subtitle:'What each option fixes, and what doing nothing costs', principle:'Compare each option against the problem piece by piece, and name what your own recommendation leaves unfixed. A reader who sees you state your option\'s limits will believe you about the others.', ids:['step-four-continued-weigh-the-options-against-the-problem-q1','step-four-continued-weigh-the-options-against-the-problem-q2','step-four-continued-weigh-the-options-against-the-problem-q3','step-four-continued-weigh-the-options-against-the-problem-q4'] },
+      { title:'Step five: commit', subtitle:'What you would recommend, and what defending it requires', principle:'A brief has to recommend something. Choose the one you can defend honestly, knowing what it costs and what it leaves undone.', ids:['step-five-commit-q1','step-five-commit-q2'] },
+      { title:'Step five, continued: defend it', subtitle:'Name the runner-up before your reader does', principle:'Name the runner-up, say what it would accomplish, then say what it leaves undone and what your recommendation costs to reach further. A defense that concedes nothing persuades no one.', ids:['step-five-continued-defend-it-q1','step-five-continued-defend-it-q2','step-five-continued-defend-it-q3'] },
+      { title:'Step six: make the ask', subtitle:'One action, aimed at your reader, at the right stage', principle:'End with one action, aimed at the person holding the brief, at the stage your issue is actually in, with a date attached and something offered in return.', ids:['step-six-make-the-ask-q1'] },
+      { title:'Step six, continued: say how you would know it worked', subtitle:'A baseline, a date, and a result that could go against you', principle:'Tie your measure to the problem you named at the start, give it a baseline and a date, and make sure it could come back against you.', ids:['step-six-continued-say-how-you-would-know-it-worked-q1','step-six-continued-say-how-you-would-know-it-worked-q2','step-six-continued-say-how-you-would-know-it-worked-q3'] }
+    ];
+
+    function questionById(id) {
+      for (const screen of screens) {
+        const index = screen.parsed.questions.findIndex((_, qIndex) => qid(screen, qIndex) === id);
+        if (index >= 0) return { screen, question: screen.parsed.questions[index], index };
+      }
+      return null;
+    }
+
+    function summaryWork(id) {
+      const found = questionById(id);
+      if (!found) return [];
+      const { question } = found;
+      const data = answer(id);
+      const output = [];
+      if (question.type === 'write') {
+        let label = 'Your response';
+        if (id === 'step-one-state-the-problem-q1') label = 'Your original problem statement';
+        if (id === 'step-one-state-the-problem-q4') label = 'Your revised problem statement';
+        if (id === 'step-five-commit-q2') label = 'What defending your recommendation would require';
+        if (FINAL_VERSION_SOURCES[id]) label = 'Your final version';
+        output.push([label, data.text || 'No response entered']);
+      }
+      if (question.type === 'choice') {
+        const items = parseItems(question.lines, 'choice');
+        output.push(['Your choice', Number.isInteger(data.selected) ? items[data.selected]?.label : 'No choice recorded']);
+      }
+      if (question.type === 'selfcheck') {
+        const labels = [];
+        const start = question.lines.findIndex(line => line.trim() === '*Checkboxes:*');
+        for (let i = start + 1; i < question.lines.length; i++) {
+          const line = question.lines[i]?.trim() || '';
+          if (!line && !labels.length) continue;
+          const match = line.match(/^-\s+(.+)/);
+          if (!match) { if (labels.length) break; else continue; }
+          labels.push(match[1]);
+        }
+        output.push(['Your self-check', (data.checks || []).map(i => labels[i]).join('; ') || 'None checked']);
+      }
+      if (question.type === 'sort') {
+        const items = parseItems(question.lines, 'sort');
+        output.push(['Your categories', items.map((item, i) => `${item.label} — ${(data.assignments || {})[i] || 'No category chosen'}`).join('\n')]);
+      }
+      if (question.type === 'multi') {
+        const items = parseItems(question.lines, 'multi');
+        output.push(['Items you selected', (data.selectedItems || []).map(i => items[i]?.label).filter(Boolean).join('\n') || 'None selected']);
+      }
+      return output;
+    }
+
+    function summaryScreen() {
+      progressFill.style.width = '100%';
+      const cards = summaryItems.map(item => {
+        const work = item.ids.flatMap(summaryWork);
+        return `<section class="summary-step"><h3>${escapeHtml(item.title)}</h3><p class="summary-subtitle">${escapeHtml(item.subtitle)}</p><dl class="student-work">${work.map(([label, value]) => `<dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value || '')}</dd>`).join('')}</dl><p class="principle"><strong>Principle:</strong> ${escapeHtml(item.principle)}</p></section>`;
+      }).join('');
+      const completedDate = new Date(state.completedAt || Date.now()).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+      app.innerHTML = `<section class="screen page-card"><div class="page-banner"><p class="eyebrow">Completed activity</p><h1>Policy brief activity: summary sheet</h1><p class="lede">Your responses and the principle from each step are collected below.</p></div><div class="summary-page">
+        <div class="summary-toolbar"><div><strong>Print this now.</strong><br><span>Choose Save as PDF in your browser's print window.</span></div><button class="button orange" id="print-summary">Print or save as PDF</button></div>
+        <div class="summary-identity"><div><span>Student name</span><strong>${escapeHtml(state.studentName || 'Name not entered')}</strong></div><div><span>Activity completed</span><strong>${escapeHtml(completedDate)}</strong></div></div>
+        ${cards}
+        <section class="final-word"><h3>A last word</h3><p>This activity used a bill in a fictional statehouse because legislation is the clearest version of the process. It has visible stages, a written record, and a person whose job is to decide. It is not the most common version.</p><p>Most of the advocacy you do will be closer than that: a protocol on your unit, a staffing pattern your council could take up, an organizational policy that needs another look, or a position your professional organization could be asked to take. The six steps do not change with the size of the room.</p><p>Nurses are closest to the place where a policy meets a patient. You see the distance between what a policy says and what it does long before many people who write policy will. That knowledge does not travel on its own. Somebody has to carry it into the room where the decision gets made, in a form the person making the decision can use.</p><p><strong>That is what a brief is for, and you now know how to build one. The next one is yours.</strong></p></section>
+        <nav class="screen-nav print-hide"><button class="button secondary" data-back>Back to Step 6</button></nav>
+      </div></section>`;
+      document.getElementById('print-summary').addEventListener('click', () => window.print());
+      document.querySelector('[data-back]').addEventListener('click', () => go(screens.length));
+    }
+
+    function go(screen) {
+      state.screen = Math.max(0, Math.min(screen, screens.length + 1));
+      if (state.screen === screens.length + 1 && !state.completedAt) state.completedAt = Date.now();
+      persist(); render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function registerWebMcp() {
+      const context = document.modelContext;
+      if (!context?.registerTool) return;
+      const completedCount = () => Object.values(state.completed).filter(Boolean).length;
+      try {
+        void Promise.resolve(context.registerTool({
+          name: 'read_activity_progress',
+          title: 'Read activity progress',
+          description: 'Read the learner’s current location and number of completed questions without changing the activity.',
+          inputSchema: { type: 'object', properties: {}, additionalProperties: false },
+          annotations: { readOnlyHint: true, untrustedContentHint: false },
+          execute() {
+            return { currentScreen: state.screen, totalScreens: screens.length + 2, completedQuestions: completedCount(), totalQuestions: totalQuestionCount };
+          }
+        })).catch(() => {});
+        void Promise.resolve(context.registerTool({
+          name: 'navigate_activity',
+          title: 'Navigate the activity',
+          description: 'Open a numbered activity screen. Screen 0 is the introduction and the final screen is the summary.',
+          inputSchema: {
+            type: 'object',
+            properties: { screen: { type: 'integer', minimum: 0, maximum: 12 } },
+            required: ['screen'],
+            additionalProperties: false
+          },
+          annotations: { readOnlyHint: false, untrustedContentHint: false },
+          execute(input) {
+            if (!Number.isInteger(input?.screen) || input.screen < 0 || input.screen > screens.length + 1) throw new Error('Screen must be an integer from 0 through 12.');
+            let highestUnlocked = 1;
+            for (let index = 0; index < screens.length; index++) {
+              const screen = screens[index];
+              const complete = screen.parsed.questions.every((_, questionIndex) => isDone(qid(screen, questionIndex)));
+              if (!complete) break;
+              highestUnlocked = index + 2;
+            }
+            if (input.screen > highestUnlocked) throw new Error('Complete the earlier questions before opening that screen.');
+            go(input.screen);
+            return { currentScreen: state.screen };
+          }
+        })).catch(() => {});
+      } catch { /* WebMCP is optional in browsers that do not support it. */ }
+    }
+
+    function render() {
+      if (state.screen === 0) openingScreen();
+      else if (state.screen <= screens.length) stepScreen(state.screen);
+      else summaryScreen();
+    }
+
+    async function restoreAndStart() {
+      try {
+        const indexed = await readIndexedState();
+        if (indexed && Number(indexed.savedAt || 0) > Number(state.savedAt || 0)) Object.assign(state, indexed);
+      } catch { /* Local storage may still contain the saved work. */ }
+      let updated = false;
+      const priorProblemRevision = answer('step-one-state-the-problem-q3').optional?.trim();
+      if (priorProblemRevision && !answer('step-one-state-the-problem-q4').text?.trim()) {
+        state.answers['step-one-state-the-problem-q4'] = { text: priorProblemRevision };
+        state.completed['step-one-state-the-problem-q4'] = true;
+        updated = true;
+      }
+      if (Object.prototype.hasOwnProperty.call(answer('step-one-state-the-problem-q3'), 'optional')) {
+        delete state.answers['step-one-state-the-problem-q3'].optional;
+        updated = true;
+      }
+      const priorDefense = answer('step-five-commit-q1').optional?.trim();
+      if (priorDefense && !answer('step-five-commit-q2').text?.trim()) {
+        state.answers['step-five-commit-q2'] = { text: priorDefense };
+        state.completed['step-five-commit-q2'] = true;
+        updated = true;
+      }
+      if (Object.prototype.hasOwnProperty.call(answer('step-five-commit-q1'), 'optional')) {
+        delete state.answers['step-five-commit-q1'].optional;
+        updated = true;
+      }
+      const finalVersionMigrations = [
+        ['step-three-continued-take-the-objection-seriously-q3', 'step-three-continued-take-the-objection-seriously-q4'],
+        ['step-four-continued-weigh-the-options-against-the-problem-q3', 'step-four-continued-weigh-the-options-against-the-problem-q4'],
+        ['step-five-continued-defend-it-q2', 'step-five-continued-defend-it-q3'],
+        ['step-six-continued-say-how-you-would-know-it-worked-q2', 'step-six-continued-say-how-you-would-know-it-worked-q3']
+      ];
+      for (const [fromId, toId] of finalVersionMigrations) {
+        const priorFinalVersion = answer(fromId).optional?.trim();
+        if (priorFinalVersion && !answer(toId).text?.trim()) {
+          state.answers[toId] = { text: priorFinalVersion };
+          state.completed[toId] = true;
+          updated = true;
+        }
+        if (Object.prototype.hasOwnProperty.call(answer(fromId), 'optional')) {
+          delete state.answers[fromId].optional;
+          updated = true;
+        }
+      }
+      if (!state.studentName?.trim()) state.screen = 0;
+      else {
+        const firstIncomplete = screens.findIndex(screen => screen.parsed.questions.some((_, questionIndex) => !isDone(qid(screen, questionIndex))));
+        const highestUnlocked = firstIncomplete < 0 ? screens.length + 1 : firstIncomplete + 1;
+        if (state.screen > highestUnlocked) { state.screen = highestUnlocked; updated = true; }
+      }
+      if (navigator.storage?.persist) navigator.storage.persist().catch(() => {});
+      if (updated) persist();
+      render();
+      registerWebMcp();
+      saveStatus.textContent = savedStatus();
+    }
+
+    function saveBeforeLeaving() {
+      state.savedAt = Date.now();
+      const snapshot = JSON.parse(JSON.stringify(state));
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot)); } catch { /* IndexedDB remains available in most browsers. */ }
+      writeIndexedState(snapshot).catch(() => {});
+    }
+
+    async function startOver() {
+      window.clearTimeout(persist.indexedTimer);
+      try { localStorage.removeItem(STORAGE_KEY); } catch { /* Continue with the second device save. */ }
+      try { await clearIndexedState(); } catch { /* The in-memory activity will still reset. */ }
+      Object.assign(state, { screen: 0, studentName: '', answers: {}, completed: {}, completedAt: 0, savedAt: 0 });
+      render();
+      saveStatus.textContent = 'Ready for a fresh start';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('pagehide', saveBeforeLeaving);
+    document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') saveBeforeLeaving(); });
+    document.getElementById('start-over').addEventListener('click', () => {
+      if (typeof restartDialog.showModal === 'function') restartDialog.showModal();
+      else if (window.confirm('Erase the student name and every saved response and start over?')) startOver();
+    });
+    document.getElementById('cancel-restart').addEventListener('click', () => restartDialog.close());
+    document.getElementById('confirm-restart').addEventListener('click', () => { restartDialog.close(); startOver(); });
+    restartDialog.addEventListener('click', event => { if (event.target === restartDialog) restartDialog.close(); });
+    restoreAndStart();
+  </script>
+</body>
+</html>
